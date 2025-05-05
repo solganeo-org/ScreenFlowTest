@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Flow Screen1 intégré</title>
+
+    <!-- Script Lightning depuis ton domaine Lightning -->
+    <script src="https://solganeo--carboneio.sandbox.lightning.force.com/lightning/lightning.out.js"></script>
+  </head>
+
+  <body>
+    <h2>Flow Salesforce intégré (Screen1)</h2>
+    <div id="flowContainer"></div>
+
+    <script>
+      $Lightning.use("c:embeddedFlowApp", function() {
+        $Lightning.createComponent("c:embeddedFlow", {}, "flowContainer");
+      }, "https://solganeo--carboneio.sandbox.my.salesforce-sites.com");
+    </script>
+  </body>
+</html>
