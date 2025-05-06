@@ -3,7 +3,53 @@
   <head>
     <meta charset="UTF-8">
     <title>Flow Screen1 intégré</title>
-
+    <style>
+      /* Conteneur principal du Flow */
+      #flowContainer {
+        max-width: 720px;
+        margin: 60px auto;
+        padding: 32px;
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        font-family: 'Segoe UI', sans-serif;
+        transition: all 0.3s ease;
+      }
+    
+      /* Titre principal */
+      h2 {
+        text-align: center;
+        color: #1e3a8a;
+        font-weight: 600;
+        margin-bottom: 30px;
+        font-size: 24px;
+      }
+    
+      /* Boutons internes du Flow (JS injection plus bas complète ça) */
+      .slds-button_brand {
+        background-color: #1e3a8a !important;
+        border-radius: 12px !important;
+        padding: 10px 20px !important;
+        font-size: 16px !important;
+        font-weight: bold !important;
+      }
+    
+      /* Masquer certaines bordures Salesforce */
+      .slds-card__header,
+      .slds-card__footer {
+        border: none !important;
+        background: transparent !important;
+      }
+    
+      /* Centrage dynamique pour écrans mobiles */
+      @media (max-width: 768px) {
+        #flowContainer {
+          padding: 20px;
+          margin: 20px;
+        }
+      }
+    </style>
+    
     <!-- Script Lightning depuis ton domaine Lightning -->
     <script src="https://solganeo--carboneio.sandbox.lightning.force.com/lightning/lightning.out.js"></script>
   </head>
@@ -17,5 +63,41 @@
         $Lightning.createComponent("c:embeddedFlow", {}, "flowContainer");
       }, "https://solganeo--carboneio.sandbox.my.salesforce-sites.com");
     </script>
+    <script>
+      $Lightning.use("c:embeddedFlowApp", function () {
+        $Lightning.createComponent("c:embeddedFlow", {}, "flowContainer");
+    
+        // Attendre que le Flow charge
+        setTimeout(() => {
+          const flowEl = document.querySelector("flowruntime-flow");
+    
+          if (flowEl && flowEl.shadowRoot) {
+            const style = document.createElement("style");
+            style.textContent = `
+              button.slds-button_brand {
+                background-color: #1e3a8a !important;
+                border-radius: 10px !important;
+                padding: 10px 24px !important;
+                font-size: 16px !important;
+                transition: all 0.2s ease-in-out;
+              }
+    
+              button.slds-button_brand:hover {
+                background-color: #152e66 !important;
+              }
+    
+              .slds-rich-text-editor__output p {
+                font-size: 18px;
+                line-height: 1.6;
+                color: #333;
+                text-align: center;
+              }
+            `;
+            flowEl.shadowRoot.appendChild(style);
+          }
+        }, 1500); // adapte selon ton temps de chargement
+      }, "https://solganeo--carboneio.sandbox.my.salesforce-sites.com");
+    </script>
+    
   </body>
 </html>
