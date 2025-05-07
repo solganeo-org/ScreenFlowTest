@@ -48,6 +48,68 @@
           margin: 20px;
         }
       }
+      
+      /* Styles pour les feux d'artifice */
+      .pyro {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        pointer-events: none;
+        display: none;
+      }
+      
+      .pyro > .before, .pyro > .after {
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        box-shadow: 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff;
+        animation: 1s bang ease-out infinite backwards, 1s gravity ease-in infinite backwards, 5s position linear infinite backwards;
+      }
+      
+      .pyro > .after {
+        animation-delay: 1.25s, 1.25s, 1.25s;
+        animation-duration: 1.25s, 1.25s, 6.25s;
+      }
+      
+      @keyframes bang {
+        to {
+          box-shadow: -70px -33.9px #00ff84, 58px -63.9px #ff004d, 8px -193.9px #ff1100, 228px 57.1px #9dff00, 132px -203.9px #ff5500, 87px -108.9px #00ff73, 151px -315.9px #3700ff, 249px -87.9px #ff00c8, -217px -303.9px #00ff95, 193px -176.9px #00ff8c, 252px -125.9px #00ffb3, -232px -334.9px #7b00ff, 192px -3.9px #ff6f00, 160px 75.1px #0051ff, 127px -162.9px #0026ff, 56px -102.9px #8400ff, 149px -218.9px #0dff00, 104px 22.1px #0400ff, 72px -384.9px #00a2ff, 147px -223.9px #00c4ff, -163px -403.9px #ff00d5, 12px -198.9px #00ffa2, 240px -394.9px #ff00fb, 98px -107.9px #001aff, -236px -428.9px #88ff00, 125px -227.9px #e600ff, -233px -71.9px #3cff00, -209px -394.9px #00ffa2, 57px -371.9px #00ff33, 165px -123.9px #ff0062, 188px -143.9px #ff002f, -205px -240.9px #ff009d, -2px -91.9px #ff0400, -107px -290.9px #0062ff, -114px -156.9px #00ff88, 199px -330.9px #00ffcc, 3px -125.9px #ff006a, 145px -147.9px #ff0400, 115px -100.9px #ffae00, 9px -145.9px #3300ff, -31px -104.9px #00ff6a, -196px -182.9px #00ff15, 95px 73.1px #0048ff, -102px -128.9px #00ffa2, 244px -400.9px #00aeff, 158px -344.9px #3300ff, -167px -230.9px #ff0099, 72px -347.9px #6a00ff, 153px -419.9px #00ff4d;
+        }
+      }
+      
+      @keyframes gravity {
+        to {
+          transform: translateY(200px);
+          opacity: 0;
+        }
+      }
+      
+      @keyframes position {
+        0%, 19.9% {
+          margin-top: 10%;
+          margin-left: 40%;
+        }
+        20%, 39.9% {
+          margin-top: 40%;
+          margin-left: 30%;
+        }
+        40%, 59.9% {
+          margin-top: 20%;
+          margin-left: 70%;
+        }
+        60%, 79.9% {
+          margin-top: 30%;
+          margin-left: 20%;
+        }
+        80%, 99.9% {
+          margin-top: 30%;
+          margin-left: 80%;
+        }
+      }
     </style>
     
     <!-- Script Lightning depuis ton domaine Lightning -->
@@ -57,16 +119,17 @@
   <body>
     <h2>Flow Salesforce intégré (Screen1)</h2>
     <div id="flowContainer"></div>
+    
+    <!-- Container pour les feux d'artifice -->
+    <div class="pyro">
+      <div class="before"></div>
+      <div class="after"></div>
+    </div>
 
     <script>
       $Lightning.use("c:embeddedFlowApp", function() {
         $Lightning.createComponent("c:embeddedFlow", {}, "flowContainer");
-      }, "https://solganeo--carboneio.sandbox.my.salesforce-sites.com");
-    </script>
-    <script>
-      $Lightning.use("c:embeddedFlowApp", function () {
-        $Lightning.createComponent("c:embeddedFlow", {}, "flowContainer");
-    
+        
         // Attendre que le Flow charge
         setTimeout(() => {
           const flowEl = document.querySelector("flowruntime-flow");
@@ -94,10 +157,62 @@
               }
             `;
             flowEl.shadowRoot.appendChild(style);
+            
+            // Observer pour détecter les clics sur le bouton Finish
+            const observer = new MutationObserver((mutations) => {
+              const footerButtons = flowEl.shadowRoot.querySelectorAll('footer button');
+              footerButtons.forEach(button => {
+                if (button.textContent.includes('Finish') && !button.hasAttribute('data-fireworks-added')) {
+                  button.setAttribute('data-fireworks-added', 'true');
+                  button.addEventListener('click', showFireworks);
+                }
+              });
+            });
+            
+            // Configuration de l'observateur
+            observer.observe(flowEl.shadowRoot, {
+              childList: true,
+              subtree: true
+            });
           }
-        }, 1500); // adapte selon ton temps de chargement
+        }, 1500);
+        
+        // Fonction pour afficher les feux d'artifice
+        function showFireworks() {
+          const pyro = document.querySelector('.pyro');
+          pyro.style.display = 'block';
+          
+          // Créer plus de feux d'artifice
+          for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+              const newPyro = document.createElement('div');
+              newPyro.className = 'pyro';
+              newPyro.style.display = 'block';
+              
+              const before = document.createElement('div');
+              before.className = 'before';
+              const after = document.createElement('div');
+              after.className = 'after';
+              
+              newPyro.appendChild(before);
+              newPyro.appendChild(after);
+              
+              document.body.appendChild(newPyro);
+              
+              // Supprimer après l'animation
+              setTimeout(() => {
+                document.body.removeChild(newPyro);
+              }, 3000);
+            }, i * 300);
+          }
+          
+          // Cacher les feux d'artifice après quelques secondes
+          setTimeout(() => {
+            pyro.style.display = 'none';
+          }, 3000);
+        }
+        
       }, "https://solganeo--carboneio.sandbox.my.salesforce-sites.com");
     </script>
-    
   </body>
 </html>
