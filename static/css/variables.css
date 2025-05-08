@@ -50,7 +50,7 @@
   --radius-lg: 12px; /* Coins arrondis grands */
   --radius-xl: 16px; /* Coins arrondis très grands */
   --radius-2xl: 24px; /* Coins arrondis extra grands */
-  --container-width: 800px; /* Largeur maximale du conteneur */
+  --container-width: 1200px; /* Largeur maximale du conteneur */
   --header-height: 80px; /* Hauteur de l'en-tête */
   
   /* Z-index layers */
