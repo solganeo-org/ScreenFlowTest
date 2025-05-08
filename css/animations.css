@@ -1,0 +1,188 @@
+/* animations.css - Animations et transitions */
+
+/* Animation d'entrée */
+.animate-in {
+  animation: cardSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cardSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation de succès */
+.card.success-animation {
+  animation: successPulse 1.5s ease forwards;
+}
+
+@keyframes successPulse {
+  0% {
+    box-shadow: var(--shadow-md);
+  }
+  30% {
+    box-shadow: 0 0 0 20px rgba(200, 157, 81, 0.1), 0 0 0 40px rgba(200, 157, 81, 0.05);
+  }
+  100% {
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* Feux d'artifice */
+.pyro {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-overlay);
+  pointer-events: none;
+  display: none;
+}
+
+.pyro > .before, .pyro > .after {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  box-shadow: 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff;
+  animation: 1s bang ease-out infinite backwards, 1s gravity ease-in infinite backwards, 5s position linear infinite backwards;
+}
+
+.pyro > .after {
+  animation-delay: 1.25s, 1.25s, 1.25s;
+  animation-duration: 1.25s, 1.25s, 6.25s;
+}
+
+/* Couleurs personnalisées pour les feux d'artifice */
+@keyframes bang {
+  to {
+    box-shadow: -70px -33.9px var(--primary), 58px -63.9px var(--secondary), 8px -193.9px var(--accent), 228px 57.1px var(--primary), 132px -203.9px var(--secondary), 87px -108.9px var(--accent), 151px -315.9px var(--primary), 249px -87.9px var(--secondary), -217px -303.9px var(--accent), 193px -176.9px var(--primary), 252px -125.9px var(--secondary), -232px -334.9px var(--accent), 192px -3.9px var(--primary), 160px 75.1px var(--secondary), 127px -162.9px var(--accent), 56px -102.9px var(--primary), 149px -218.9px var(--secondary), 104px 22.1px var(--accent), 72px -384.9px var(--primary), 147px -223.9px var(--secondary), -163px -403.9px var(--accent), 12px -198.9px var(--primary), 240px -394.9px var(--secondary), 98px -107.9px var(--accent), -236px -428.9px var(--primary), 125px -227.9px var(--secondary), -233px -71.9px var(--accent), -209px -394.9px var(--primary), 57px -371.9px var(--secondary), 165px -123.9px var(--accent);
+  }
+}
+
+@keyframes gravity {
+  to {
+    transform: translateY(200px);
+    opacity: 0;
+  }
+}
+
+@keyframes position {
+  0%, 19.9% {
+    margin-top: 5%;
+    margin-left: 30%;
+  }
+  20%, 39.9% {
+    margin-top: 15%;
+    margin-left: 50%;
+  }
+  40%, 59.9% {
+    margin-top: 10%;
+    margin-left: 70%;
+  }
+  60%, 79.9% {
+    margin-top: 20%;
+    margin-left: 20%;
+  }
+  80%, 99.9% {
+    margin-top: 15%;
+    margin-left: 60%;
+  }
+}
+
+/* Animation de fondu */
+.fade-in {
+  animation: fadeIn 0.4s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-out {
+  animation: fadeOut 0.4s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Animation de chargement */
+.pulse {
+  animation: pulse 1.5s ease infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+}
+
+/* Animation de survol du bouton */
+.button-hover {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.button-hover:hover {
+  transform: translateY(-2px);
+}
+
+.button-hover:active {
+  transform: translateY(0);
+}
+
+/* Animation de validation (checkmark) */
+@keyframes checkmark {
+  0% {
+    height: 0;
+    width: 0;
+    opacity: 0;
+  }
+  40% {
+    height: 0;
+    width: 6px;
+    opacity: 1;
+  }
+  100% {
+    height: 10px;
+    width: 6px;
+    opacity: 1;
+  }
+}
+
+.checkmark {
+  display: inline-block;
+  transform: rotate(45deg);
+  height: 10px;
+  width: 6px;
+  border-bottom: 2px solid var(--success);
+  border-right: 2px solid var(--success);
+  animation: checkmark 0.3s ease-in-out forwards;
+}

@@ -1,0 +1,389 @@
+/* responsive.css - Adaptations responsives */
+
+/* Variables de points de rupture */
+:root {
+  --breakpoint-xs: 480px;   /* Extra small devices */
+  --breakpoint-sm: 640px;   /* Small devices */
+  --breakpoint-md: 768px;   /* Medium devices */
+  --breakpoint-lg: 1024px;  /* Large devices */
+  --breakpoint-xl: 1280px;  /* Extra large devices */
+}
+
+/* Extra small devices (phones, 480px and down) */
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+  
+  .page-content {
+    padding: 0 1rem;
+  }
+  
+  .card {
+    padding: 1.5rem 1rem;
+    border-radius: var(--radius-xl);
+  }
+  
+  .logo-container {
+    padding: 0.5rem 1.25rem;
+    max-width: 260px;
+  }
+  
+  .main-title {
+    font-size: var(--font-size-xl);
+  }
+  
+  .main-subtitle {
+    font-size: var(--font-size-sm);
+  }
+  
+  .card::before {
+    left: 1rem;
+    right: 1rem;
+  }
+  
+  /* Adaptations pour les éléments de formulaire */
+  .slds-button_brand {
+    padding: 0.75rem 1.5rem !important;
+    font-size: var(--font-size-xs) !important;
+    width: 100% !important;
+  }
+  
+  input, select, textarea {
+    padding: 0.75rem 0.875rem !important;
+  }
+  
+  /* Réduction des marges dans les formulaires */
+  .slds-form-element {
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Ajustement du titre du Flow */
+  .slds-text-heading_small {
+    font-size: var(--font-size-md) !important;
+  }
+  
+  /* Réduction de la marge inférieure */
+  .card-container {
+    margin-bottom: 3rem;
+  }
+}
+
+/* Small devices (tablets, 641px to 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .page-content {
+    padding: 0 1.25rem;
+  }
+  
+  .card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .main-title {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .main-subtitle {
+    max-width: 420px;
+  }
+  
+  /* Adaptations pour les éléments de formulaire */
+  .slds-button_brand {
+    padding: 0.875rem 1.5rem !important;
+  }
+}
+
+/* Medium devices (desktops, 769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    max-width: 740px;
+  }
+  
+  .card {
+    padding: 2.25rem;
+  }
+}
+
+/* Large devices (desktops, 1025px to 1280px) */
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .container {
+    max-width: 980px;
+  }
+}
+
+/* Extra large devices (large desktops, 1281px and up) */
+@media (min-width: 1281px) {
+  .container {
+    max-width: var(--container-width);
+  }
+  
+  .card {
+    padding: 2.75rem;
+  }
+}
+
+/* Orientation spécifique - Portrait */
+@media (orientation: portrait) {
+  .decoration-circle-1 {
+    width: 300px;
+    height: 300px;
+    top: -100px;
+    right: -80px;
+  }
+  
+  .decoration-circle-2 {
+    width: 400px;
+    height: 400px;
+    bottom: -150px;
+    left: -100px;
+  }
+}
+
+/* Orientation spécifique - Landscape */
+@media (orientation: landscape) and (max-height: 600px) {
+  .site-header {
+    padding: 0.75rem 0;
+  }
+  
+  .main-title-container {
+    margin: 1.5rem 0 2rem;
+  }
+  
+  .card-container {
+    margin-bottom: 2.5rem;
+  }
+  
+  .card {
+    padding: 2rem 1.5rem;
+  }
+  
+  /* Adaptation de l'espacement dans les formulaires */
+  .slds-form-element {
+    margin-bottom: 1rem !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+    font-size: 12pt;
+  }
+  
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #e0e0e0;
+    padding: 1.5rem;
+  }
+  
+  .decoration-circle,
+  .background-decoration::before,
+  .card::before,
+  .card::after,
+  .pyro,
+  .loader,
+  .card-shadow {
+    display: none !important;
+  }
+  
+  .top-line {
+    height: 3px;
+  }
+  
+  input, select, textarea {
+    border: 1px solid #888 !important;
+    background: white !important;
+  }
+  
+  /* Optimisation pour l'impression */
+  .page-wrapper {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* Adaptations pour les écrans à haute densité de pixels */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Optimisation des images et des bordures pour les écrans Retina */
+  .card::before {
+    transform: scaleY(0.5);
+    transform-origin: top;
+  }
+  
+  .border {
+    border-width: 0.5px !important;
+  }
+}
+
+/* Adaptations pour les modes de contraste élevé */
+@media (prefers-contrast: high) {
+  :root {
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+    --shadow-focus: 0 0 0 2px black;
+  }
+  
+  .card {
+    border: 2px solid black !important;
+    box-shadow: none !important;
+  }
+  
+  .card::before, 
+  .card::after {
+    display: none;
+  }
+  
+  input, select, textarea {
+    border: 2px solid black !important;
+    background: white !important;
+  }
+  
+  .slds-button_brand {
+    border: 2px solid black !important;
+    outline: 1px solid white !important;
+    box-shadow: none !important;
+  }
+  
+  .main-title-highlight::after {
+    background-color: transparent;
+    border-bottom: 3px solid black;
+  }
+}
+
+/* Adaptations pour la réduction des mouvements (accessibilité) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  
+  .card.success-animation {
+    animation: none !important;
+  }
+  
+  .card:hover {
+    transform: none !important;
+  }
+  
+  .slds-button_brand:hover {
+    transform: none !important;
+  }
+  
+  .pyro {
+    display: none !important;
+  }
+  
+  .form-element-focus {
+    transform: none !important;
+  }
+  
+  /* Message de confirmation alternatif */
+  .success-message.show {
+    opacity: 1;
+    transform: none;
+    border-left: 4px solid var(--success);
+    padding-left: 0.5rem;
+  }
+}
+
+/* Adaptations pour écrans ultra-larges */
+@media (min-width: 1920px) {
+  :root {
+    --container-width: 1200px;
+  }
+  
+  html {
+    font-size: 18px;
+  }
+  
+  .background-decoration::before {
+    background-size: 150px 150px;
+  }
+  
+  .decoration-circle-1 {
+    width: 600px;
+    height: 600px;
+  }
+  
+  .decoration-circle-2 {
+    width: 700px;
+    height: 700px;
+  }
+  
+  .card {
+    padding: 3rem;
+  }
+  
+  .main-title {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+/* Adaptations pour les très petits écrans (smartwatches, etc.) */
+@media (max-width: 320px) {
+  html {
+    font-size: 12px;
+  }
+  
+  .logo-container {
+    max-width: 220px;
+  }
+  
+  .card {
+    padding: 1.25rem 0.75rem;
+  }
+  
+  .main-title {
+    font-size: var(--font-size-lg);
+  }
+  
+  .main-subtitle {
+    font-size: var(--font-size-xs);
+  }
+  
+  .slds-button_brand {
+    padding: 0.625rem 1.25rem !important;
+    font-size: var(--font-size-xs) !important;
+  }
+  
+  /* Simplification des décorations */
+  .decoration-circle {
+    display: none;
+  }
+}
+
+/* Adaptations spécifiques pour tablettes en mode paysage */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  .site-header {
+    padding: 1rem 0;
+  }
+  
+  .card-container {
+    margin-bottom: 3rem;
+  }
+  
+  .card {
+    padding: 2.25rem 2rem;
+  }
+}
+
+/* Adaptations pour les appareils pliables en mode déplié */
+@media (min-width: 1280px) and (max-height: 900px) {
+  .page-content {
+    padding: 0 2rem;
+  }
+  
+  .card-container {
+    margin-bottom: 3.5rem;
+  }
+}

@@ -1,0 +1,198 @@
+/* theme.css - Surcharges thématiques pour le Conseil national de l'ordre des experts-comptables */
+
+/**
+ * Ce fichier contient les surcharges spécifiques au thème du 
+ * Conseil national de l'ordre des experts-comptables.
+ * Il permet de personnaliser l'apparence sans modifier les autres fichiers CSS.
+ */
+
+/* Couleurs spécifiques institutionnelles */
+:root {
+  /* Couleurs principales de la charte graphique */
+  --primary-experts: #002e5f;      /* Bleu principal de l'Ordre */
+  --secondary-experts: #0054a6;    /* Bleu secondaire de l'Ordre */
+  --accent-experts: #c89d51;       /* Or institutionnel */
+  --accent-light-experts: #e7d6ad; /* Or clair */
+  
+  /* Application de la charte dans les variables standard */
+  --primary: var(--primary-experts);
+  --secondary: var(--secondary-experts);
+  --accent: var(--accent-experts);
+  --accent-light: var(--accent-light-experts);
+}
+
+/* Logo */
+.logo-experts {
+  max-height: 50px;
+}
+
+/* Personnalisation du header */
+.site-header.experts-header {
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 0 rgba(0, 46, 95, 0.05);
+}
+
+/* Style du titre principal spécifique */
+.experts-title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Icônes spécifiques pour l'Ordre */
+.experts-icon {
+  color: var(--primary);
+  margin-right: 0.5rem;
+}
+
+/* Bouton principal aux couleurs de l'Ordre */
+.experts-button {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(0, 46, 95, 0.2) !important;
+}
+
+.experts-button:hover {
+  box-shadow: 0 6px 20px rgba(0, 46, 95, 0.3) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Carte spécifique à l'Ordre */
+.experts-card {
+  border-top: 4px solid var(--primary) !important;
+  background-color: white !important;
+}
+
+/* Effet de signature or sur les éléments importants */
+.gold-signature {
+  position: relative;
+}
+
+.gold-signature::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+/* Arrière-plan institutionnel */
+.experts-background {
+  position: relative;
+}
+
+.experts-background::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 0C13.433 0 0 13.433 0 30c0 16.567 13.433 30 30 30 16.567 0 30-13.433 30-30C60 13.433 46.567 0 30 0zm0 54C16.767 54 6 43.233 6 30 6 16.767 16.767 6 30 6c13.233 0 24 10.767 24 24 0 13.233-10.767 24-24 24z' fill='%23002e5f' fill-opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.25;
+  z-index: -1;
+}
+
+/* Fond pour sections officielles */
+.official-section {
+  background-color: rgba(0, 46, 95, 0.02);
+  border-left: 3px solid var(--primary);
+  padding: 1.5rem;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+/* Messages d'information sur fond officiel */
+.experts-info-box {
+  position: relative;
+  background-color: rgba(0, 84, 166, 0.05);
+  border: 1px solid rgba(0, 84, 166, 0.1);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+}
+
+.experts-info-box::before {
+  content: "i";
+  position: absolute;
+  top: -10px;
+  left: 15px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* Séparateur au style de l'Ordre */
+.experts-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 2rem 0;
+  border: none;
+}
+
+/* Footer des formulaires */
+.experts-form-footer {
+  background-color: rgba(0, 46, 95, 0.02) !important;
+  border-top: 1px solid rgba(0, 46, 95, 0.05) !important;
+  padding: 1.25rem !important;
+  text-align: center !important;
+}
+
+/* Style pour les écrans de confirmation */
+.experts-confirmation {
+  border-left: 4px solid var(--success);
+  background-color: rgba(40, 110, 74, 0.05);
+  padding: 1.5rem;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  margin: 1.5rem 0;
+}
+
+/* Style d'impression pour documents officiels */
+@media print {
+  .experts-print-header {
+    border-bottom: 1px solid #002e5f;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .experts-print-footer {
+    border-top: 1px solid #002e5f;
+    padding-top: 1rem;
+    margin-top: 2rem;
+    font-size: 9pt;
+    color: #555;
+  }
+}
+
+/* Style pour le mode sombre (préparation) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* On ne modifie pas encore les variables principales pour éviter de casser la charte graphique */
+    --dark-background: #121e2d;
+    --dark-card: #1a2b3f;
+    --dark-text: #e2e8f0;
+    --dark-border: #2a3d53;
+  }
+  
+  /* Préparation des classes pour un futur mode sombre (non activé) */
+  .dark-mode .card {
+    background-color: var(--dark-card);
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+  }
+  
+  .dark-mode-toggle {
+    display: none; /* Caché pour l'instant, sera implémenté ultérieurement */
+  }
+}
