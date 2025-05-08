@@ -1,6 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="260" height="75" viewBox="0 0 260 50">
-  <rect fill="#FFFFFF" width="260" height="75" rx="6"/>
-  <path fill="#002e5f" d="M21 13.5h218c1.4 0 2.5 1.1 2.5 2.5v18c0 1.4-1.1 2.5-2.5 2.5H21c-1.4 0-2.5-1.1-2.5-2.5V16c0-1.4 1.1-2.5 2.5-2.5z"/>
-  <text x="130" y="25" dominant-baseline="middle" text-anchor="middle" font-family="Montserrat" font-weight="600" font-size="11" fill="white">Conseil National de l'Ordre</text>
-  <text x="130" y="36" dominant-baseline="middle" text-anchor="middle" font-family="Montserrat" font-weight="600" font-size="10" fill="white">des Experts-Comptables</text>
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1080" height="1080" viewBox="0 0 1080 1080" xml:space="preserve">
+<desc>Created with Fabric.js 5.2.4</desc>
+<defs>
+</defs>
+<g transform="matrix(1 0 0 1 540 540)" id="5acf260f-cd58-4b9c-8daa-fa93d5803d55"  >
+<rect style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1; visibility: hidden;" vector-effect="non-scaling-stroke"  x="-540" y="-540" rx="0" ry="0" width="1080" height="1080" />
+</g>
+<g transform="matrix(1 0 0 1 540 540)" id="ff2ed011-a7e9-429b-8dd1-3ba29544a5a0"  >
+</g>
+<g transform="matrix(3.51 0 0 3.51 509.53 489.76)"  >
+<rect style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  x="-130" y="-37.5" rx="6" ry="6" width="260" height="75" />
+</g>
+<g transform="matrix(3.93 0 0 5.91 509.03 488.32)"  >
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,46,95); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-130, -25)" d="M 21 13.5 L 239 13.5 C 240.4 13.5 241.5 14.6 241.5 16 L 241.5 34 C 241.5 35.4 240.4 36.5 239 36.5 L 21 36.5 C 19.6 36.5 18.5 35.4 18.5 34 L 18.5 16 C 18.5 14.6 19.6 13.5 21 13.5 z" stroke-linecap="round" />
+</g>
+<g transform="matrix(1 0 0 1 511.95 496.37)" style="" id="57b6da7a-dc13-4174-b914-0612547ffd52"  >
+		<text xml:space="preserve" font-family="Alegreya" font-size="50" font-style="normal" font-weight="700" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-311.37" y="-12.54" >Conseil national de l&apos;ordre des</tspan><tspan x="-205.5" y="43.96" >experts-comptables</tspan></text>
+</g>
 </svg>
