@@ -2,54 +2,204 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Flow Screen1 intégré</title>
+    <title>Conseil national de l'ordre des experts-comptables - Flow Screen</title>
     <style>
-      /* Conteneur principal du Flow */
-      #flowContainer {
-        max-width: 720px;
-        margin: 60px auto;
-        padding: 32px;
-        background: #ffffff;
-        border-radius: 20px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-        font-family: 'Segoe UI', sans-serif;
-        transition: all 0.3s ease;
+      /* Variables pour faciliter les modifications */
+      :root {
+        --primary: #0f4c81; /* Bleu professionnel */
+        --secondary: #3a86c8; /* Bleu secondaire */
+        --accent: #f59b23; /* Orange accent pour contraste */
+        --text: #2c3e50; /* Texte foncé */
+        --light: #f9f9f9; /* Fond clair */
+        --grey: #eaeff5; /* Gris clair */
+        --radius: 12px; /* Rayon des coins */
+        --shadow: 0 10px 30px rgba(15, 76, 129, 0.1); /* Ombre douce */
       }
-    
+      
+      /* Reset et styles généraux */
+      body, html {
+        margin: 0;
+        padding: 0;
+        font-family: 'Nunito Sans', 'Segoe UI', sans-serif;
+        background-color: var(--light);
+        color: var(--text);
+        position: relative;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      
+      /* Arrière-plan stylisé */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+          linear-gradient(135deg, rgba(15, 76, 129, 0.03) 0%, rgba(15, 76, 129, 0.07) 100%),
+          url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230f4c81' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        z-index: -1;
+      }
+      
+      /* En-tête avec logo */
+      .header {
+        text-align: center;
+        padding: 20px 0;
+        margin-bottom: 20px;
+      }
+      
+      .logo {
+        max-width: 280px;
+        height: auto;
+      }
+      
       /* Titre principal */
       h2 {
         text-align: center;
-        color: #1e3a8a;
-        font-weight: 600;
-        margin-bottom: 30px;
-        font-size: 24px;
+        color: var(--primary);
+        font-weight: 700;
+        margin: 10px 0 30px;
+        font-size: 28px;
+        letter-spacing: -0.5px;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 15px;
+      }
+      
+      h2::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        border-radius: 3px;
+      }
+      
+      /* Conteneur principal du Flow avec effet de profondeur */
+      #flowContainer {
+        max-width: 720px;
+        margin: 20px auto 60px;
+        padding: 40px;
+        background: #ffffff;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        transition: all 0.3s ease;
+        position: relative;
+        border-top: 5px solid var(--primary);
+      }
+      
+      #flowContainer::before {
+        content: "";
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        right: 15px;
+        bottom: -15px;
+        border-radius: var(--radius);
+        z-index: -1;
+        background-color: var(--grey);
+        opacity: 0.6;
       }
     
-      /* Boutons internes du Flow (JS injection plus bas complète ça) */
+      /* Boutons internes du Flow */
       .slds-button_brand {
-        background-color: #1e3a8a !important;
-        border-radius: 12px !important;
-        padding: 10px 20px !important;
+        background-color: var(--primary) !important;
+        border: none !important;
+        border-radius: var(--radius) !important;
+        padding: 12px 24px !important;
         font-size: 16px !important;
-        font-weight: bold !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.3px !important;
+        text-transform: uppercase !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 10px rgba(15, 76, 129, 0.2) !important;
       }
-    
+      
+      .slds-button_brand:hover {
+        background-color: var(--secondary) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 15px rgba(15, 76, 129, 0.3) !important;
+      }
+      
+      /* Style des champs d'entrée */
+      input, select, textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d8e2f0 !important;
+        padding: 12px 16px !important;
+        font-size: 16px !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03) inset !important;
+      }
+      
+      input:focus, select:focus, textarea:focus {
+        border-color: var(--secondary) !important;
+        box-shadow: 0 0 0 2px rgba(58, 134, 200, 0.2) !important;
+      }
+      
       /* Masquer certaines bordures Salesforce */
       .slds-card__header,
       .slds-card__footer {
         border: none !important;
         background: transparent !important;
       }
-    
+      
+      /* Styles pour texte riche */
+      .slds-rich-text-editor__output p {
+        font-size: 18px !important;
+        line-height: 1.7 !important;
+        color: var(--text) !important;
+        text-align: center !important;
+        margin-bottom: 20px !important;
+      }
+      
+      /* Footer du Flow et liens */
+      footer.slds-modal__footer {
+        background: rgba(249, 249, 249, 0.8) !important;
+        border-top: 1px solid rgba(15, 76, 129, 0.1) !important;
+        display: flex !important;
+        justify-content: center !important;
+        padding: 20px 0 !important;
+      }
+      
       /* Centrage dynamique pour écrans mobiles */
       @media (max-width: 768px) {
+        h2 {
+          font-size: 24px;
+        }
+        
         #flowContainer {
-          padding: 20px;
+          padding: 30px 20px;
           margin: 20px;
+          width: calc(100% - 40px);
+        }
+        
+        .slds-button_brand {
+          padding: 10px 20px !important;
+          width: 100% !important;
         }
       }
       
-      /* Styles pour les feux d'artifice */
+      /* Animations sur éléments */
+      .animate-in {
+        animation: fadeSlideIn 0.8s ease forwards;
+      }
+      
+      @keyframes fadeSlideIn {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      /* Styles pour les feux d'artifice améliorés */
       .pyro {
         position: fixed;
         top: 0;
@@ -63,10 +213,10 @@
       
       .pyro > .before, .pyro > .after {
         position: absolute;
-        width: 5px;
-        height: 5px;
+        width: 6px;
+        height: 6px;
         border-radius: 50%;
-        box-shadow: 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff;
+        box-shadow: 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff;
         animation: 1s bang ease-out infinite backwards, 1s gravity ease-in infinite backwards, 5s position linear infinite backwards;
       }
       
@@ -75,9 +225,10 @@
         animation-duration: 1.25s, 1.25s, 6.25s;
       }
       
+      /* Couleurs personnalisées pour les feux d'artifice */
       @keyframes bang {
         to {
-          box-shadow: -70px -33.9px #00ff84, 58px -63.9px #ff004d, 8px -193.9px #ff1100, 228px 57.1px #9dff00, 132px -203.9px #ff5500, 87px -108.9px #00ff73, 151px -315.9px #3700ff, 249px -87.9px #ff00c8, -217px -303.9px #00ff95, 193px -176.9px #00ff8c, 252px -125.9px #00ffb3, -232px -334.9px #7b00ff, 192px -3.9px #ff6f00, 160px 75.1px #0051ff, 127px -162.9px #0026ff, 56px -102.9px #8400ff, 149px -218.9px #0dff00, 104px 22.1px #0400ff, 72px -384.9px #00a2ff, 147px -223.9px #00c4ff, -163px -403.9px #ff00d5, 12px -198.9px #00ffa2, 240px -394.9px #ff00fb, 98px -107.9px #001aff, -236px -428.9px #88ff00, 125px -227.9px #e600ff, -233px -71.9px #3cff00, -209px -394.9px #00ffa2, 57px -371.9px #00ff33, 165px -123.9px #ff0062, 188px -143.9px #ff002f, -205px -240.9px #ff009d, -2px -91.9px #ff0400, -107px -290.9px #0062ff, -114px -156.9px #00ff88, 199px -330.9px #00ffcc, 3px -125.9px #ff006a, 145px -147.9px #ff0400, 115px -100.9px #ffae00, 9px -145.9px #3300ff, -31px -104.9px #00ff6a, -196px -182.9px #00ff15, 95px 73.1px #0048ff, -102px -128.9px #00ffa2, 244px -400.9px #00aeff, 158px -344.9px #3300ff, -167px -230.9px #ff0099, 72px -347.9px #6a00ff, 153px -419.9px #00ff4d;
+          box-shadow: -70px -33.9px var(--primary), 58px -63.9px var(--secondary), 8px -193.9px var(--accent), 228px 57.1px var(--primary), 132px -203.9px var(--secondary), 87px -108.9px var(--accent), 151px -315.9px var(--primary), 249px -87.9px var(--secondary), -217px -303.9px var(--accent), 193px -176.9px var(--primary), 252px -125.9px var(--secondary), -232px -334.9px var(--accent), 192px -3.9px var(--primary), 160px 75.1px var(--secondary), 127px -162.9px var(--accent), 56px -102.9px var(--primary), 149px -218.9px var(--secondary), 104px 22.1px var(--accent), 72px -384.9px var(--primary), 147px -223.9px var(--secondary), -163px -403.9px var(--accent), 12px -198.9px var(--primary), 240px -394.9px var(--secondary), 98px -107.9px var(--accent), -236px -428.9px var(--primary), 125px -227.9px var(--secondary), -233px -71.9px var(--accent), -209px -394.9px var(--primary), 57px -371.9px var(--secondary), 165px -123.9px var(--accent);
         }
       }
       
@@ -90,35 +241,42 @@
       
       @keyframes position {
         0%, 19.9% {
-          margin-top: 10%;
-          margin-left: 40%;
-        }
-        20%, 39.9% {
-          margin-top: 40%;
+          margin-top: 5%;
           margin-left: 30%;
         }
+        20%, 39.9% {
+          margin-top: 15%;
+          margin-left: 50%;
+        }
         40%, 59.9% {
-          margin-top: 20%;
+          margin-top: 10%;
           margin-left: 70%;
         }
         60%, 79.9% {
-          margin-top: 30%;
+          margin-top: 20%;
           margin-left: 20%;
         }
         80%, 99.9% {
-          margin-top: 30%;
-          margin-left: 80%;
+          margin-top: 15%;
+          margin-left: 60%;
         }
       }
     </style>
     
-    <!-- Script Lightning depuis ton domaine Lightning -->
+    <!-- Script Lightning depuis le domaine Lightning -->
     <script src="https://solganeo--carboneio.sandbox.lightning.force.com/lightning/lightning.out.js"></script>
   </head>
 
   <body>
-    <h2>Flow Salesforce intégré (Screen1)</h2>
-    <div id="flowContainer"></div>
+    <div class="header">
+      <!-- Logo placeholder - à remplacer par le vrai logo -->
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='60' viewBox='0 0 280 60'%3E%3Cpath fill='%230f4c81' d='M20 10h240c5.5 0 10 4.5 10 10v20c0 5.5-4.5 10-10 10H20c-5.5 0-10-4.5-10-10V20c0-5.5 4.5-10 10-10z'/%3E%3Ctext x='140' y='32' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-weight='bold' font-size='14' fill='white'%3EConseil National de l'Ordre%3C/text%3E%3Ctext x='140' y='46' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-weight='bold' font-size='12' fill='white'%3Edes Experts-Comptables%3C/text%3E%3C/svg%3E" alt="Conseil national de l'ordre des experts-comptables" class="logo">
+    </div>
+    
+    <div class="animate-in">
+      <h2>Authentification et Accès Sécurisé</h2>
+      <div id="flowContainer"></div>
+    </div>
     
     <!-- Container pour les feux d'artifice -->
     <div class="pyro">
@@ -130,7 +288,12 @@
       $Lightning.use("c:embeddedFlowApp", function() {
         $Lightning.createComponent("c:embeddedFlow", {}, "flowContainer");
         
-        // Attendre que le Flow charge
+        // Animer les éléments au chargement
+        document.querySelectorAll('.animate-in').forEach(element => {
+          element.classList.add('animate-in');
+        });
+        
+        // Attendre que le Flow charge et appliquer les styles personnalisés
         setTimeout(() => {
           const flowEl = document.querySelector("flowruntime-flow");
     
@@ -138,22 +301,55 @@
             const style = document.createElement("style");
             style.textContent = `
               button.slds-button_brand {
-                background-color: #1e3a8a !important;
-                border-radius: 10px !important;
-                padding: 10px 24px !important;
+                background-color: var(--primary, #0f4c81) !important;
+                border-radius: 12px !important;
+                padding: 12px 24px !important;
                 font-size: 16px !important;
-                transition: all 0.2s ease-in-out;
+                font-weight: 600 !important;
+                letter-spacing: 0.3px !important;
+                text-transform: uppercase !important;
+                transition: all 0.3s ease !important;
+                box-shadow: 0 4px 10px rgba(15, 76, 129, 0.2) !important;
               }
     
               button.slds-button_brand:hover {
-                background-color: #152e66 !important;
+                background-color: var(--secondary, #3a86c8) !important;
+                transform: translateY(-2px) !important;
+                box-shadow: 0 6px 15px rgba(15, 76, 129, 0.3) !important;
               }
-    
+              
+              input, select, textarea {
+                border-radius: 8px !important;
+                border: 1px solid #d8e2f0 !important;
+                padding: 12px 16px !important;
+                font-size: 16px !important;
+                transition: all 0.2s ease !important; 
+              }
+              
+              input:focus, select:focus, textarea:focus {
+                border-color: var(--secondary, #3a86c8) !important;
+                box-shadow: 0 0 0 2px rgba(58, 134, 200, 0.2) !important;
+              }
+              
               .slds-rich-text-editor__output p {
-                font-size: 18px;
-                line-height: 1.6;
-                color: #333;
-                text-align: center;
+                font-size: 18px !important;
+                line-height: 1.7 !important;
+                color: #2c3e50 !important;
+                text-align: center !important;
+                margin-bottom: 20px !important;
+              }
+              
+              .slds-form-element__label {
+                font-weight: 600 !important;
+                color: #0f4c81 !important;
+              }
+              
+              footer.slds-modal__footer {
+                background: rgba(249, 249, 249, 0.8) !important;
+                border-top: 1px solid rgba(15, 76, 129, 0.1) !important;
+                display: flex !important;
+                justify-content: center !important;
+                padding: 20px 0 !important;
               }
             `;
             flowEl.shadowRoot.appendChild(style);
@@ -182,8 +378,12 @@
           const pyro = document.querySelector('.pyro');
           pyro.style.display = 'block';
           
+          // Ajouter une classe pour animer le container lors de la complétion
+          const flowContainer = document.getElementById('flowContainer');
+          flowContainer.classList.add('success-animation');
+          
           // Créer plus de feux d'artifice
-          for (let i = 0; i < 5; i++) {
+          for (let i = 0; i < 8; i++) {
             setTimeout(() => {
               const newPyro = document.createElement('div');
               newPyro.className = 'pyro';
