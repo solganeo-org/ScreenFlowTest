@@ -1,0 +1,63 @@
+/* variables.css - Définition des variables globales */
+
+:root {
+  /* Palette principale */
+  --primary: #002e5f; /* Bleu profond institutionnel */
+  --primary-dark: #00203f; /* Bleu plus foncé pour hover */
+  --secondary: #0054a6; /* Bleu secondaire */
+  --accent: #c89d51; /* Or professionnel */
+  --accent-light: #e7d6ad; /* Or clair pour effets */
+  
+  /* Palette étendue */
+  --success: #286e4a; /* Vert validation */
+  --error: #b23a48; /* Rouge erreur */
+  --warning: #d99f40; /* Orange avertissement */
+  --info: #3a7db5; /* Bleu information */
+  
+  /* Couleurs neutres */
+  --text-primary: #283747; /* Texte principal */
+  --text-secondary: #5d6c7b; /* Texte secondaire */
+  --text-tertiary: #8695a4; /* Texte léger */
+  --background-main: #f8fafd; /* Fond principal */
+  --background-light: #ffffff; /* Fond clair */
+  --background-dark: #e9eef5; /* Fond foncé */
+  --border: #e0e7f0; /* Bordures standards */
+  --border-light: #eef3f9; /* Bordures légères */
+  
+  /* Ombres et effets */
+  --shadow-sm: 0 2px 4px rgba(0, 46, 95, 0.06); /* Ombre légère */
+  --shadow-md: 0 8px 24px rgba(0, 46, 95, 0.08), 0 2px 6px rgba(0, 46, 95, 0.04); /* Ombre moyenne */
+  --shadow-lg: 0 16px 40px rgba(0, 46, 95, 0.1), 0 4px 12px rgba(0, 46, 95, 0.05); /* Ombre forte */
+  --shadow-focus: 0 0 0 3px rgba(0, 84, 166, 0.15); /* Ombre de focus */
+  --shadow-success: 0 0 0 3px rgba(40, 110, 74, 0.15); /* Ombre de succès */
+  --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); /* Transition rapide */
+  --transition-normal: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Transition normale */
+  --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Transition lente */
+  
+  /* Typographie */
+  --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-md: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  
+  /* Espacements et tailles */
+  --radius-sm: 4px; /* Coins arrondis petits */
+  --radius-md: 8px; /* Coins arrondis moyens */
+  --radius-lg: 12px; /* Coins arrondis grands */
+  --radius-xl: 16px; /* Coins arrondis très grands */
+  --radius-2xl: 24px; /* Coins arrondis extra grands */
+  --container-width: 1200px; /* Largeur maximale du conteneur */
+  --header-height: 80px; /* Hauteur de l'en-tête */
+  
+  /* Z-index layers */
+  --z-header: 100;
+  --z-dropdown: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+}

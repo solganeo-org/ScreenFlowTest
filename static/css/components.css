@@ -1,0 +1,216 @@
+/* components.css - Composants réutilisables */
+
+/* Logo et conteneur */
+.logo-container {
+  position: relative;
+  background-color: var(--background-light);
+  padding: 0.75rem 2rem;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  box-shadow: var(--shadow-md);
+  border-bottom: 3px solid var(--accent);
+  max-width: 320px;
+  transform: translateY(-2px);
+  transition: var(--transition-normal);
+}
+
+.logo-container:hover {
+  transform: translateY(0);
+  box-shadow: var(--shadow-lg);
+}
+
+.logo {
+  height: auto;
+  display: block;
+}
+
+/* Titres et sous-titres */
+.main-title-container {
+  text-align: center;
+  margin: 2rem 0 3rem;
+  padding: 0 1rem;
+}
+
+.main-title {
+  display: inline-block;
+  font-weight: 700;
+  font-size: var(--font-size-2xl);
+  color: var(--primary);
+  position: relative;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+}
+
+.main-title-highlight {
+  position: relative;
+  display: inline-block;
+  z-index: 1;
+  padding: 0 0.25rem;
+}
+
+.main-title-highlight::after {
+  content: "";
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background-color: var(--accent-light);
+  z-index: -1;
+  border-radius: var(--radius-sm);
+  opacity: 0.7;
+}
+
+.main-subtitle {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  font-weight: 500;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Séparateur */
+.separator {
+  height: 3px;
+  width: 60px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  margin: 1rem auto 0;
+  border-radius: 3px;
+}
+
+/* Carte principale */
+.card {
+  position: relative;
+  background-color: var(--background-light);
+  border-radius: var(--radius-2xl);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-normal);
+  z-index: 2;
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+}
+
+/* Effet de surlignage supérieur */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 2rem;
+  right: 2rem;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+/* Effet de fond géométrique */
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 180px;
+  height: 180px;
+  background-image: url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h45v45H0V0zm45 45h45v45H45V45zm45-45h45v45H90V0zm45 45h45v45h-45V45zm-90 90h45v45H45v-45zm45-90h45v45H90V45zm45 90h45v45h-45v-45zm-90-45h45v45H45v-45zm90 0h45v45h-45v-45z' fill='%23002e5f' fill-opacity='0.015' fill-rule='evenodd'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  z-index: -1;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Effet d'ombre douce sous la carte */
+.card-shadow {
+  position: absolute;
+  bottom: -10px;
+  left: 5%;
+  width: 90%;
+  height: 20px;
+  background-color: var(--primary);
+  opacity: 0.05;
+  filter: blur(15px);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* Message de succès */
+.success-message {
+  position: absolute;
+  bottom: 1rem;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--success);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: var(--transition-normal);
+}
+
+.success-message.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.success-message-icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--success);
+  position: relative;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
+.success-message-icon::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%) rotate(45deg);
+  width: 6px;
+  height: 10px;
+  border-bottom: 2px solid white;
+  border-right: 2px solid white;
+}
+
+/* Indicateur de chargement */
+.loader {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 10;
+  backdrop-filter: blur(3px);
+  border-radius: var(--radius-2xl);
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: var(--transition-fast);
+}
+
+.loader.show {
+  display: flex;
+  opacity: 1;
+}
+
+/* Animation du loader */
+.loader-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
