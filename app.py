@@ -1,10 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
+import os
 import random
 from itsdangerous import TimestampSigner
 
 app = Flask(__name__)
-app.secret_key = 'REMPLACE_PAR_UN_SECRET_SÉCURISÉ'
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-change-me')
 signer = TimestampSigner(app.secret_key)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -17,7 +22,7 @@ def login():
         session['signed_otp'] = signed_otp
         session['email'] = email
 
-        # (Remplacer par un vrai envoi d'email)
+        # (Simuler l'envoi - afficher dans les logs Heroku)
         print(f"Envoyer OTP à {email}: {otp}")
 
         return redirect(url_for('verify'))
@@ -32,7 +37,7 @@ def verify():
             flash("Session expirée. Recommencez.")
             return redirect(url_for('login'))
         try:
-            original_otp = signer.unsign(signed_otp, max_age=300).decode()  # 5 minutes validité
+            original_otp = signer.unsign(signed_otp, max_age=300).decode()
             if otp_entered == original_otp:
                 session['authenticated'] = True
                 return redirect(url_for('dynamic_page'))
@@ -48,3 +53,7 @@ def dynamic_page():
     if not session.get('authenticated'):
         return redirect(url_for('login'))
     return render_template('dynamic_page.html')
+
+# Point d'entrée pour Heroku
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
