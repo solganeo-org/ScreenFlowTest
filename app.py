@@ -424,7 +424,7 @@ def cleanup_expired_otps():
 @app.route("/pdf")
 def pdf():
     """
-    Route protégée - display pdf
+    Route protégée - PDF
     Nécessite une authentification OTP valide
     """
     if not is_session_valid():
@@ -434,6 +434,7 @@ def pdf():
     session_status = get_session_status()
     
     return render_template("pdf.html", session_status=session_status)
+
 
 
 if __name__ == "__main__":

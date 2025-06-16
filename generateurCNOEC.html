@@ -442,6 +442,48 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="lightningAppName">
+                            Lightning Application Name <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="lightningAppName" 
+                            name="lightningAppName" 
+                            required 
+                            placeholder="Ex: embeddedFlowApp"
+                        >
+                        <div class="help-text">Nom de l'application Lightning (sera préfixé par "c:")</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lightningComponentName">
+                            Lightning Component Name <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="lightningComponentName" 
+                            name="lightningComponentName" 
+                            required 
+                            placeholder="Ex: embeddedFlow"
+                        >
+                        <div class="help-text">Nom du composant Lightning (sera préfixé par "c:")</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="screenFlowName">
+                            Screen Flow Name <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="screenFlowName" 
+                            name="screenFlowName" 
+                            required 
+                            placeholder="Ex: Screen1"
+                        >
+                        <div class="help-text">Nom du Screen Flow à démarrer dans Salesforce</div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="pageType">
                             Type de page <span class="required">*</span>
                         </label>
@@ -504,10 +546,12 @@
                     <div class="step" id="step1">📋 Validation des données</div>
                     <div class="step" id="step2">📄 Génération du template HTML</div>
                     <div class="step" id="step3">🐍 Création des routes Python</div>
-                    <div class="step" id="step4">🎨 Génération du CSS commun</div>
-                    <div class="step" id="step5">⚡ Création du JavaScript</div>
-                    <div class="step" id="step6">📚 Rédaction du README</div>
-                    <div class="step" id="step7">📦 Création du fichier ZIP</div>
+                    <div class="step" id="step4">⚡ Génération Lightning Application</div>
+                    <div class="step" id="step5">🔧 Génération Lightning Component</div>
+                    <div class="step" id="step6">🎨 Génération du CSS commun</div>
+                    <div class="step" id="step7">📱 Création du JavaScript</div>
+                    <div class="step" id="step8">📚 Rédaction du README</div>
+                    <div class="step" id="step9">📦 Création du fichier ZIP</div>
                 </div>
 
                 <div class="success-message" id="successMessage">
@@ -551,13 +595,16 @@
             const data = {
                 siteName: formData.get('siteName'),
                 flowApiName: formData.get('flowApiName'),
+                lightningAppName: formData.get('lightningAppName'),
+                lightningComponentName: formData.get('lightningComponentName'),
+                screenFlowName: formData.get('screenFlowName'),
                 pageType: formData.get('pageType'),
                 routeName: formData.get('routeName'),
                 pageDescription: formData.get('pageDescription') || ''
             };
 
             // Validation
-            if (!data.siteName || !data.flowApiName || !data.pageType || !data.routeName) {
+            if (!data.siteName || !data.flowApiName || !data.lightningAppName || !data.lightningComponentName || !data.screenFlowName || !data.pageType || !data.routeName) {
                 alert('Veuillez remplir tous les champs obligatoires (*)');
                 return;
             }
@@ -566,6 +613,9 @@
             generatorData = {
                 siteName: data.siteName.replace(/[<>]/g, '').trim(),
                 flowApiName: data.flowApiName.replace(/[^a-zA-Z0-9_]/g, '').trim(),
+                lightningAppName: data.lightningAppName.replace(/[^a-zA-Z0-9_]/g, '').trim(),
+                lightningComponentName: data.lightningComponentName.replace(/[^a-zA-Z0-9_]/g, '').trim(),
+                screenFlowName: data.screenFlowName.replace(/[^a-zA-Z0-9_]/g, '').trim(),
                 pageType: data.pageType,
                 routeName: data.routeName.replace(/[^a-zA-Z0-9_-]/g, '').trim(),
                 pageDescription: data.pageDescription.replace(/[<>]/g, '').trim()
@@ -574,6 +624,16 @@
             // Validation supplémentaire
             if (generatorData.flowApiName.length < 3) {
                 alert('L\'API Name du Flow doit contenir au moins 3 caractères');
+                return;
+            }
+
+            if (generatorData.lightningAppName.length < 3) {
+                alert('Le nom de l\'application Lightning doit contenir au moins 3 caractères');
+                return;
+            }
+
+            if (generatorData.lightningComponentName.length < 3) {
+                alert('Le nom du composant Lightning doit contenir au moins 3 caractères');
                 return;
             }
 
@@ -593,6 +653,8 @@
                 { func: validateData, label: 'Validation des données' },
                 { func: generateHTML, label: 'Génération du template HTML' },
                 { func: generatePythonRoutes, label: 'Création des routes Python' },
+                { func: generateLightningApplication, label: 'Génération Lightning Application' },
+                { func: generateLightningComponent, label: 'Génération Lightning Component' },
                 { func: generateCSS, label: 'Génération du CSS commun' },
                 { func: generateJavaScript, label: 'Création du JavaScript' },
                 { func: generateREADME, label: 'Rédaction du README' },
@@ -641,7 +703,7 @@
             document.getElementById('generatorForm').reset();
             
             // Reset des étapes
-            for (let i = 1; i <= 7; i++) {
+            for (let i = 1; i <= 9; i++) {
                 updateStep(i, '');
             }
             
@@ -715,7 +777,7 @@
             htmlContent += '<script src="{{ url_for(\'static\', filename=\'js/salesforce-flow.js\') }}"><\/script>\n';
             htmlContent += '<script>\n';
             htmlContent += '  const FLOW_CONFIG = {\n';
-            htmlContent += '    apiName: "' + data.flowApiName + '",\n';
+            htmlContent += '    apiName: "c:' + data.lightningAppName + '",\n';
             htmlContent += '    siteName: "' + data.siteName + '"\n';
             htmlContent += '  };\n';
             htmlContent += '  \n';
@@ -756,6 +818,40 @@
             }
 
             window.generatedFiles.python = pythonContent;
+        }
+
+        async function generateLightningApplication() {
+            const data = generatorData;
+            
+            let appContent = '';
+            appContent += '<aura:application access="GLOBAL" extends="ltng:outApp" implements="ltng:allowGuestAccess">\n';
+            appContent += '    <aura:dependency resource="c:' + data.lightningComponentName + '"/>\n';
+            appContent += '</aura:application>';
+            
+            window.generatedFiles.lightningApp = appContent;
+        }
+
+        async function generateLightningComponent() {
+            const data = generatorData;
+            
+            // Component (.cmp)
+            let componentContent = '';
+            componentContent += '<aura:component implements="force:appHostable" access="global">\n';
+            componentContent += '    <lightning:flow aura:id="flowData"/>\n';
+            componentContent += '    <aura:handler name="init" value="{!this}" action="{!c.startFlow}"/>\n';
+            componentContent += '</aura:component>';
+            
+            // Controller (.js)
+            let controllerContent = '';
+            controllerContent += '({\n';
+            controllerContent += '    startFlow : function(component, event, helper) {\n';
+            controllerContent += '        var flow = component.find("flowData");\n';
+            controllerContent += '        flow.startFlow("' + data.screenFlowName + '");\n';
+            controllerContent += '    }\n';
+            controllerContent += '})';
+            
+            window.generatedFiles.lightningComponent = componentContent;
+            window.generatedFiles.lightningController = controllerContent;
         }
 
         async function generateCSS() {
@@ -818,6 +914,8 @@
         }
 
         async function generateJavaScript() {
+            const data = generatorData;
+            
             window.generatedFiles.js = '// JavaScript commun pour les Flow Salesforce\n\n' +
                 'function initializeSalesforceFlow(config) {\n' +
                 '  if (typeof $Lightning === "undefined") {\n' +
@@ -831,7 +929,7 @@
                 '      loadingElement.style.display = "none";\n' +
                 '    }\n' +
                 '    \n' +
-                '    $Lightning.createComponent("c:embeddedFlow", {}, "salesforceFlowContent");\n' +
+                '    $Lightning.createComponent("c:' + data.lightningComponentName + '", {}, "salesforceFlowContent");\n' +
                 '  }, "https://solganeo--carboneio.sandbox.my.salesforce-sites.com");\n' +
                 '}\n\n' +
                 'function applyFlowStyling() {\n' +
@@ -857,18 +955,46 @@
             const data = generatorData;
             window.generatedFiles.readme = '# ' + data.siteName + ' - Instructions d\'intégration\n\n' +
                 '## Fichiers générés\n\n' +
+                '### Flask (côté serveur)\n' +
                 '- `' + data.routeName + '.html` - Template HTML\n' +
                 '- `routes_to_add.py` - Routes Python\n' +
                 '- `static/css/salesforce-flow.css` - Styles CSS\n' +
                 '- `static/js/salesforce-flow.js` - JavaScript\n\n' +
-                '## Installation\n\n' +
+                '### Salesforce Lightning (côté Salesforce)\n' +
+                '- `' + data.lightningAppName + '.app` - Application Lightning\n' +
+                '- `' + data.lightningComponentName + '.cmp` - Composant Lightning\n' +
+                '- `' + data.lightningComponentName + 'Controller.js` - Contrôleur Lightning\n\n' +
+                '## Installation Flask\n\n' +
                 '1. Copiez ' + data.routeName + '.html dans templates/\n' +
                 '2. Copiez les fichiers CSS/JS dans static/\n' +
                 '3. Ajoutez les routes Python dans app.py\n\n' +
+                '## Installation Salesforce\n\n' +
+                '1. Créez l\'application Lightning :\n' +
+                '   - Nom: ' + data.lightningAppName + '\n' +
+                '   - Copiez le contenu de ' + data.lightningAppName + '.app\n\n' +
+                '2. Créez le composant Lightning :\n' +
+                '   - Nom: ' + data.lightningComponentName + '\n' +
+                '   - Copiez le contenu de ' + data.lightningComponentName + '.cmp\n' +
+                '   - Copiez le contrôleur ' + data.lightningComponentName + 'Controller.js\n\n' +
+                '3. Assurez-vous que le Flow "' + data.screenFlowName + '" existe et est actif\n\n' +
                 '## Configuration\n\n' +
-                'Flow API: ' + data.flowApiName + '\n' +
-                'Type: ' + (data.pageType === 'private' ? 'Page privée avec OTP' : 'Page publique') + '\n' +
-                'Route: /' + data.routeName + '\n\n' +
+                '- **Lightning App** : c:' + data.lightningAppName + '\n' +
+                '- **Lightning Component** : c:' + data.lightningComponentName + '\n' +
+                '- **Screen Flow** : ' + data.screenFlowName + '\n' +
+                '- **Type de page** : ' + (data.pageType === 'private' ? 'Page privée avec OTP' : 'Page publique') + '\n' +
+                '- **Route Flask** : /' + data.routeName + '\n\n' +
+                '## Structure de déploiement\n\n' +
+                '```\n' +
+                'Salesforce:\n' +
+                '  └── Lightning Application: ' + data.lightningAppName + '\n' +
+                '      └── Lightning Component: ' + data.lightningComponentName + '\n' +
+                '          └── Screen Flow: ' + data.screenFlowName + '\n' +
+                '\n' +
+                'Flask:\n' +
+                '  └── Route: /' + data.routeName + '\n' +
+                '      └── Template: ' + data.routeName + '.html\n' +
+                '          └── JavaScript appelle: c:' + data.lightningAppName + '\n' +
+                '```\n\n' +
                 'Généré le ' + new Date().toLocaleDateString('fr-FR');
         }
 
@@ -876,11 +1002,18 @@
             const zip = new JSZip();
             const data = generatorData;
 
-            // Ajout des fichiers au ZIP
+            // Fichiers Flask
             zip.file(data.routeName + '.html', window.generatedFiles.html);
             zip.file('routes_to_add.py', window.generatedFiles.python);
             zip.file('static/css/salesforce-flow.css', window.generatedFiles.css);
             zip.file('static/js/salesforce-flow.js', window.generatedFiles.js);
+            
+            // Fichiers Salesforce Lightning
+            zip.file('salesforce/' + data.lightningAppName + '.app', window.generatedFiles.lightningApp);
+            zip.file('salesforce/' + data.lightningComponentName + '.cmp', window.generatedFiles.lightningComponent);
+            zip.file('salesforce/' + data.lightningComponentName + 'Controller.js', window.generatedFiles.lightningController);
+            
+            // Documentation
             zip.file('README.md', window.generatedFiles.readme);
 
             // Génération et téléchargement
@@ -897,6 +1030,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             const routeNameInput = document.getElementById('routeName');
             const flowApiInput = document.getElementById('flowApiName');
+            const lightningAppInput = document.getElementById('lightningAppName');
+            const lightningComponentInput = document.getElementById('lightningComponentName');
+            const screenFlowInput = document.getElementById('screenFlowName');
 
             if (routeNameInput) {
                 routeNameInput.addEventListener('input', function() {
@@ -906,6 +1042,24 @@
 
             if (flowApiInput) {
                 flowApiInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^a-zA-Z0-9_]/g, '');
+                });
+            }
+
+            if (lightningAppInput) {
+                lightningAppInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^a-zA-Z0-9_]/g, '');
+                });
+            }
+
+            if (lightningComponentInput) {
+                lightningComponentInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^a-zA-Z0-9_]/g, '');
+                });
+            }
+
+            if (screenFlowInput) {
+                screenFlowInput.addEventListener('input', function() {
                     this.value = this.value.replace(/[^a-zA-Z0-9_]/g, '');
                 });
             }

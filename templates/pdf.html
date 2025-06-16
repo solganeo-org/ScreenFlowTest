@@ -1,8 +1,8 @@
 {% extends "base_user.html" %}
 
-{% block title %}display pdf{% endblock %}
+{% block title %}PDF{% endblock %}
 
-{% block description %}affichage doc{% endblock %}
+{% block description %}display pdf{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/salesforce-flow.css') }}">
@@ -10,8 +10,8 @@
 
 {% block content %}
 <div class="flow-welcome animate-in">
-  <h2>display pdf</h2>
-  <p>affichage doc</p>
+  <h2>PDF</h2>
+  <p>display pdf</p>
   <div class="flow-badge">
     <span>🔒</span>
     Session sécurisée pour {{ session.get('otp_email_verified', 'utilisateur') }}
@@ -49,8 +49,8 @@
 <script src="{{ url_for('static', filename='js/salesforce-flow.js') }}"></script>
 <script>
   const FLOW_CONFIG = {
-    apiName: "pdf",
-    siteName: "display pdf"
+    apiName: "c:PDFApp",
+    siteName: "PDF"
   };
   
   document.addEventListener('DOMContentLoaded', function() {
