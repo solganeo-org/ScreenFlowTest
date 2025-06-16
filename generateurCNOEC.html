@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Sites Flask Salesforce</title>
+    <style>
+        :root {
+            --primary: #002e5f;
+            --secondary: #0054a6;
+            --accent: #c89d51;
+            --background: #f8fafd;
+            --background-light: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --border-light: #f3f4f6;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --transition-fast: all 0.15s ease;
+            --transition-normal: all 0.3s ease;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section.hidden {
+            display: none;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            background: var(--background-light);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+            text-align: center;
+            transition: var(--transition-normal);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Form */
+        .form-card {
+            background: var(--background-light);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            transition: var(--transition-fast);
+            background: rgba(248, 250, 253, 0.8);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(0, 84, 166, 0.1);
+            background: var(--background-light);
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .required {
+            color: var(--error);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-normal);
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .btn-secondary {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        /* Progress */
+        .progress-card {
+            background: var(--background-light);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .steps {
+            text-align: left;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .step {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: rgba(0, 84, 166, 0.05);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            transition: var(--transition-normal);
+        }
+
+        .step.active {
+            background: rgba(0, 84, 166, 0.1);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .step.completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .success-message {
+            background: var(--success);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-md);
+            margin: 1rem 0;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .success-message.show {
+            display: flex;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(0, 84, 166, 0.05);
+            border: 1px solid rgba(0, 84, 166, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .info-box h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-box li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .info-box li::before {
+            content: "✓";
+            color: var(--success);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header {
+                padding: 2rem 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-card, .progress-card {
+                padding: 1.5rem;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header (toujours visible) -->
+        <div class="header">
+            <h1>🚀 Générateur de Sites Flask</h1>
+            <p>Créez facilement des pages Flask avec intégration Salesforce Flow</p>
+        </div>
+
+        <!-- Section 1: Présentation -->
+        <div id="sectionPresentation" class="section">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">📋</span>
+                    <h3>Formulaire Simple</h3>
+                    <p>Configuration intuitive en quelques clics</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3>Intégration Salesforce</h3>
+                    <p>Code généré pour vos Screen Flows</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">🔐</span>
+                    <h3>Authentification OTP</h3>
+                    <p>Pages privées ou publiques au choix</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">📦</span>
+                    <h3>Code Prêt</h3>
+                    <p>Fichiers HTML, Python, CSS et JS</p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3>🎯 Ce que vous obtiendrez :</h3>
+                <ul>
+                    <li>Template HTML avec intégration Salesforce Flow complète</li>
+                    <li>Routes Python Flask prêtes à copier dans votre app.py</li>
+                    <li>Fichiers CSS et JavaScript optimisés</li>
+                    <li>Documentation détaillée avec instructions</li>
+                </ul>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-primary btn-full" onclick="showSection('form')">
+                    Commencer la génération
+                </button>
+            </div>
+        </div>
+
+        <!-- Section 2: Formulaire -->
+        <div id="sectionForm" class="section hidden">
+            <div class="form-card">
+                <h2 style="text-align: center; color: var(--primary); margin-bottom: 2rem;">
+                    ⚙️ Configuration de votre site
+                </h2>
+                
+                <form id="generatorForm" onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                        <label for="siteName">
+                            Nom du site/projet <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="siteName" 
+                            name="siteName" 
+                            required 
+                            placeholder="Ex: Portail Expert Comptable"
+                        >
+                        <div class="help-text">Ce nom apparaîtra comme titre de votre page</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="flowApiName">
+                            API Name du Screen Flow <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="flowApiName" 
+                            name="flowApiName" 
+                            required 
+                            placeholder="Ex: embeddedFlowApp"
+                        >
+                        <div class="help-text">Nom technique de votre Flow Salesforce</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pageType">
+                            Type de page <span class="required">*</span>
+                        </label>
+                        <select id="pageType" name="pageType" required>
+                            <option value="">Choisir le type de page</option>
+                            <option value="private">Page privée (avec authentification OTP)</option>
+                            <option value="public">Page publique (accessible sans OTP)</option>
+                        </select>
+                        <div class="help-text">Les pages privées nécessitent une authentification OTP</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="routeName">
+                            Nom de la route <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="routeName" 
+                            name="routeName" 
+                            required 
+                            placeholder="Ex: dashboard, about, contact"
+                        >
+                        <div class="help-text">URL de votre page (ex: /dashboard)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pageDescription">Description de la page</label>
+                        <input 
+                            type="text" 
+                            id="pageDescription" 
+                            name="pageDescription" 
+                            placeholder="Ex: Tableau de bord principal"
+                        >
+                        <div class="help-text">Description sous le titre (optionnel)</div>
+                    </div>
+
+                    <div class="nav-buttons">
+                        <button type="button" class="btn btn-secondary" onclick="showSection('presentation')">
+                            ← Retour
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="generateBtn">
+                            Générer le site
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Section 3: Génération -->
+        <div id="sectionGeneration" class="section hidden">
+            <div class="progress-card">
+                <h2 style="color: var(--primary); margin-bottom: 1rem;">🚀 Génération en cours</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                    Création de votre site Flask avec intégration Salesforce...
+                </p>
+                
+                <div class="spinner" id="spinner"></div>
+                
+                <div class="steps" id="steps">
+                    <div class="step" id="step1">📋 Validation des données</div>
+                    <div class="step" id="step2">📄 Génération du template HTML</div>
+                    <div class="step" id="step3">🐍 Création des routes Python</div>
+                    <div class="step" id="step4">🎨 Génération du CSS commun</div>
+                    <div class="step" id="step5">⚡ Création du JavaScript</div>
+                    <div class="step" id="step6">📚 Rédaction du README</div>
+                    <div class="step" id="step7">📦 Création du fichier ZIP</div>
+                </div>
+
+                <div class="success-message" id="successMessage">
+                    <span>✅</span>
+                    <span>Site généré avec succès ! Téléchargement terminé.</span>
+                </div>
+
+                <div class="nav-buttons" id="backToStart" style="display: none;">
+                    <button class="btn btn-primary" onclick="resetGenerator()">
+                        Créer un autre site
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script>
+        // Variables globales
+        let currentSection = 'presentation';
+        let generatorData = null;
+        let currentStep = 0;
+
+        // Navigation entre sections
+        function showSection(sectionName) {
+            // Masquer toutes les sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Afficher la section demandée
+            document.getElementById('section' + sectionName.charAt(0).toUpperCase() + sectionName.slice(1)).classList.remove('hidden');
+            currentSection = sectionName;
+        }
+
+        // Gestion du formulaire
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const data = {
+                siteName: formData.get('siteName'),
+                flowApiName: formData.get('flowApiName'),
+                pageType: formData.get('pageType'),
+                routeName: formData.get('routeName'),
+                pageDescription: formData.get('pageDescription') || ''
+            };
+
+            // Validation
+            if (!data.siteName || !data.flowApiName || !data.pageType || !data.routeName) {
+                alert('Veuillez remplir tous les champs obligatoires (*)');
+                return;
+            }
+
+            // Nettoyage des données
+            generatorData = {
+                siteName: data.siteName.replace(/[<>]/g, '').trim(),
+                flowApiName: data.flowApiName.replace(/[^a-zA-Z0-9_]/g, '').trim(),
+                pageType: data.pageType,
+                routeName: data.routeName.replace(/[^a-zA-Z0-9_-]/g, '').trim(),
+                pageDescription: data.pageDescription.replace(/[<>]/g, '').trim()
+            };
+
+            // Validation supplémentaire
+            if (generatorData.flowApiName.length < 3) {
+                alert('L\'API Name du Flow doit contenir au moins 3 caractères');
+                return;
+            }
+
+            if (generatorData.routeName.length < 2) {
+                alert('Le nom de la route doit contenir au moins 2 caractères');
+                return;
+            }
+
+            // Passage à la génération
+            showSection('generation');
+            setTimeout(startGeneration, 1000);
+        }
+
+        // Génération des fichiers
+        async function startGeneration() {
+            const steps = [
+                { func: validateData, label: 'Validation des données' },
+                { func: generateHTML, label: 'Génération du template HTML' },
+                { func: generatePythonRoutes, label: 'Création des routes Python' },
+                { func: generateCSS, label: 'Génération du CSS commun' },
+                { func: generateJavaScript, label: 'Création du JavaScript' },
+                { func: generateREADME, label: 'Rédaction du README' },
+                { func: createZipFile, label: 'Création du fichier ZIP' }
+            ];
+
+            for (let i = 0; i < steps.length; i++) {
+                currentStep = i + 1;
+                updateStep(currentStep, 'active');
+                
+                try {
+                    await steps[i].func();
+                    await delay(600);
+                    updateStep(currentStep, 'completed');
+                } catch (error) {
+                    console.error(`Erreur à l'étape ${currentStep}:`, error);
+                    alert(`Erreur lors de la génération: ${error.message}`);
+                    showBackButton();
+                    return;
+                }
+            }
+
+            // Succès
+            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('successMessage').classList.add('show');
+            showBackButton();
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function updateStep(stepNumber, status) {
+            const step = document.getElementById(`step${stepNumber}`);
+            if (step) {
+                step.className = `step ${status}`;
+            }
+        }
+
+        function showBackButton() {
+            document.getElementById('backToStart').style.display = 'block';
+        }
+
+        function resetGenerator() {
+            // Reset du formulaire
+            document.getElementById('generatorForm').reset();
+            
+            // Reset des étapes
+            for (let i = 1; i <= 7; i++) {
+                updateStep(i, '');
+            }
+            
+            // Reset de l'interface
+            document.getElementById('spinner').style.display = 'block';
+            document.getElementById('successMessage').classList.remove('show');
+            document.getElementById('backToStart').style.display = 'none';
+            
+            // Variables
+            generatorData = null;
+            currentStep = 0;
+            
+            // Retour à la présentation
+            showSection('presentation');
+        }
+
+        // Fonctions de génération (simplifiées)
+        async function validateData() {
+            if (!generatorData || !generatorData.siteName || !generatorData.flowApiName) {
+                throw new Error('Données manquantes');
+            }
+        }
+
+        async function generateHTML() {
+            const data = generatorData;
+            const isPrivate = data.pageType === 'private';
+            const description = data.pageDescription || data.siteName;
+            const otpBadge = isPrivate ? 
+                '\n  <div class="flow-badge">\n    <span>🔒</span>\n    Session sécurisée pour {{ session.get(\'otp_email_verified\', \'utilisateur\') }}\n  </div>' : '';
+            
+            window.generatedFiles = window.generatedFiles || {};
+            
+            let htmlContent = '';
+            htmlContent += '{% extends "base_user.html" %}\n\n';
+            htmlContent += '{% block title %}' + data.siteName + '{% endblock %}\n\n';
+            htmlContent += '{% block description %}' + description + '{% endblock %}\n\n';
+            htmlContent += '{% block extra_css %}\n';
+            htmlContent += '<link rel="stylesheet" href="{{ url_for(\'static\', filename=\'css/salesforce-flow.css\') }}">\n';
+            htmlContent += '{% endblock %}\n\n';
+            htmlContent += '{% block content %}\n';
+            htmlContent += '<div class="flow-welcome animate-in">\n';
+            htmlContent += '  <h2>' + data.siteName + '</h2>\n';
+            htmlContent += '  <p>' + description + '</p>' + otpBadge + '\n';
+            htmlContent += '</div>\n\n';
+            htmlContent += '<div class="main-flow-container">\n';
+            htmlContent += '  <div class="flow-card animate-in" id="flowContainer">\n';
+            htmlContent += '    <div class="flow-header">\n';
+            htmlContent += '      <h3 class="flow-title">\n';
+            htmlContent += '        <span class="flow-icon">⚡</span>\n';
+            htmlContent += '        Flow Salesforce Intégré\n';
+            htmlContent += '      </h3>\n';
+            htmlContent += '      <p class="flow-description">\n';
+            htmlContent += '        Accédez directement à vos outils Salesforce\n';
+            htmlContent += '      </p>\n';
+            htmlContent += '    </div>\n';
+            htmlContent += '    <div class="flow-content" id="salesforceFlowContent">\n';
+            htmlContent += '      <div class="flow-loading" id="flowLoading">\n';
+            htmlContent += '        <div class="flow-spinner"></div>\n';
+            htmlContent += '        <p>Chargement du Flow Salesforce...</p>\n';
+            htmlContent += '      </div>\n';
+            htmlContent += '    </div>\n';
+            htmlContent += '  </div>\n';
+            htmlContent += '</div>\n\n';
+            htmlContent += '<div class="pyro">\n';
+            htmlContent += '  <div class="before"></div>\n';
+            htmlContent += '  <div class="after"></div>\n';
+            htmlContent += '</div>\n';
+            htmlContent += '{% endblock %}\n\n';
+            htmlContent += '{% block extra_js %}\n';
+            htmlContent += '<script src="https://solganeo--carboneio.sandbox.lightning.force.com/lightning/lightning.out.js"><\/script>\n';
+            htmlContent += '<script src="{{ url_for(\'static\', filename=\'js/salesforce-flow.js\') }}"><\/script>\n';
+            htmlContent += '<script>\n';
+            htmlContent += '  const FLOW_CONFIG = {\n';
+            htmlContent += '    apiName: "' + data.flowApiName + '",\n';
+            htmlContent += '    siteName: "' + data.siteName + '"\n';
+            htmlContent += '  };\n';
+            htmlContent += '  \n';
+            htmlContent += '  document.addEventListener(\'DOMContentLoaded\', function() {\n';
+            htmlContent += '    initializeSalesforceFlow(FLOW_CONFIG);\n';
+            htmlContent += '  });\n';
+            htmlContent += '<\/script>\n';
+            htmlContent += '{% endblock %}';
+            
+            window.generatedFiles.html = htmlContent;
+        }
+
+        async function generatePythonRoutes() {
+            const data = generatorData;
+            const isPrivate = data.pageType === 'private';
+            
+            let pythonContent = '# Routes à ajouter dans votre app.py\n';
+            pythonContent += '# Copiez ce code dans votre fichier app.py existant\n\n';
+            pythonContent += '@app.route("/' + data.routeName + '")\n';
+            pythonContent += 'def ' + data.routeName + '():\n';
+            pythonContent += '    """\n';
+            pythonContent += '    Route ' + (isPrivate ? 'protégée' : 'publique') + ' - ' + data.siteName + '\n';
+            
+            if (isPrivate) {
+                pythonContent += '    Nécessite une authentification OTP valide\n';
+                pythonContent += '    """\n';
+                pythonContent += '    if not is_session_valid():\n';
+                pythonContent += '        return redirect(url_for("auth_otp"))\n';
+                pythonContent += '    \n';
+                pythonContent += '    renew_session()\n';
+                pythonContent += '    session_status = get_session_status()\n';
+                pythonContent += '    \n';
+                pythonContent += '    return render_template("' + data.routeName + '.html", session_status=session_status)';
+            } else {
+                pythonContent += '    Accessible sans authentification OTP\n';
+                pythonContent += '    """\n';
+                pythonContent += '    return render_template("' + data.routeName + '.html")';
+            }
+
+            window.generatedFiles.python = pythonContent;
+        }
+
+        async function generateCSS() {
+            window.generatedFiles.css = '/* CSS commun pour les Flow Salesforce */\n\n' +
+                '.flow-welcome {\n' +
+                '  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);\n' +
+                '  color: white;\n' +
+                '  padding: 2rem;\n' +
+                '  border-radius: var(--radius-xl);\n' +
+                '  margin-bottom: 2rem;\n' +
+                '  box-shadow: var(--shadow-lg);\n' +
+                '  text-align: center;\n' +
+                '}\n\n' +
+                '.flow-card {\n' +
+                '  background: var(--background-light);\n' +
+                '  border-radius: var(--radius-xl);\n' +
+                '  padding: 0;\n' +
+                '  box-shadow: var(--shadow-lg);\n' +
+                '  border: 1px solid var(--border-light);\n' +
+                '  overflow: hidden;\n' +
+                '}\n\n' +
+                '.flow-content {\n' +
+                '  padding: 2rem;\n' +
+                '  min-height: 400px;\n' +
+                '  position: relative;\n' +
+                '}\n\n' +
+                '.flow-loading {\n' +
+                '  position: absolute;\n' +
+                '  top: 50%;\n' +
+                '  left: 50%;\n' +
+                '  transform: translate(-50%, -50%);\n' +
+                '  text-align: center;\n' +
+                '}\n\n' +
+                '.flow-spinner {\n' +
+                '  width: 40px;\n' +
+                '  height: 40px;\n' +
+                '  border: 3px solid var(--border);\n' +
+                '  border-top: 3px solid var(--primary);\n' +
+                '  border-radius: 50%;\n' +
+                '  animation: spin 1s linear infinite;\n' +
+                '  margin: 0 auto 1rem;\n' +
+                '}\n\n' +
+                '@keyframes spin {\n' +
+                '  0% { transform: rotate(0deg); }\n' +
+                '  100% { transform: rotate(360deg); }\n' +
+                '}\n\n' +
+                '.animate-in {\n' +
+                '  animation: slideInUp 0.6s ease forwards;\n' +
+                '}\n\n' +
+                '@keyframes slideInUp {\n' +
+                '  from {\n' +
+                '    opacity: 0;\n' +
+                '    transform: translateY(30px);\n' +
+                '  }\n' +
+                '  to {\n' +
+                '    opacity: 1;\n' +
+                '    transform: translateY(0);\n' +
+                '  }\n' +
+                '}';
+        }
+
+        async function generateJavaScript() {
+            window.generatedFiles.js = '// JavaScript commun pour les Flow Salesforce\n\n' +
+                'function initializeSalesforceFlow(config) {\n' +
+                '  if (typeof $Lightning === "undefined") {\n' +
+                '    console.error("Lightning framework non chargé");\n' +
+                '    return;\n' +
+                '  }\n' +
+                '  \n' +
+                '  $Lightning.use(config.apiName, function() {\n' +
+                '    const loadingElement = document.getElementById("flowLoading");\n' +
+                '    if (loadingElement) {\n' +
+                '      loadingElement.style.display = "none";\n' +
+                '    }\n' +
+                '    \n' +
+                '    $Lightning.createComponent("c:embeddedFlow", {}, "salesforceFlowContent");\n' +
+                '  }, "https://solganeo--carboneio.sandbox.my.salesforce-sites.com");\n' +
+                '}\n\n' +
+                'function applyFlowStyling() {\n' +
+                '  const flowEl = document.querySelector("flowruntime-flow");\n' +
+                '  \n' +
+                '  if (flowEl && flowEl.shadowRoot) {\n' +
+                '    const style = document.createElement("style");\n' +
+                '    style.textContent = "/* Styles personnalisés pour le Flow */";\n' +
+                '    flowEl.shadowRoot.appendChild(style);\n' +
+                '  }\n' +
+                '}\n\n' +
+                'document.addEventListener("DOMContentLoaded", function() {\n' +
+                '  console.log("Page chargée - Flow Salesforce prêt");\n' +
+                '  \n' +
+                '  // Animation des éléments au chargement\n' +
+                '  document.querySelectorAll(".animate-in").forEach(function(element, index) {\n' +
+                '    element.style.animationDelay = (index * 0.1) + "s";\n' +
+                '  });\n' +
+                '});';
+        }
+
+        async function generateREADME() {
+            const data = generatorData;
+            window.generatedFiles.readme = '# ' + data.siteName + ' - Instructions d\'intégration\n\n' +
+                '## Fichiers générés\n\n' +
+                '- `' + data.routeName + '.html` - Template HTML\n' +
+                '- `routes_to_add.py` - Routes Python\n' +
+                '- `static/css/salesforce-flow.css` - Styles CSS\n' +
+                '- `static/js/salesforce-flow.js` - JavaScript\n\n' +
+                '## Installation\n\n' +
+                '1. Copiez ' + data.routeName + '.html dans templates/\n' +
+                '2. Copiez les fichiers CSS/JS dans static/\n' +
+                '3. Ajoutez les routes Python dans app.py\n\n' +
+                '## Configuration\n\n' +
+                'Flow API: ' + data.flowApiName + '\n' +
+                'Type: ' + (data.pageType === 'private' ? 'Page privée avec OTP' : 'Page publique') + '\n' +
+                'Route: /' + data.routeName + '\n\n' +
+                'Généré le ' + new Date().toLocaleDateString('fr-FR');
+        }
+
+        async function createZipFile() {
+            const zip = new JSZip();
+            const data = generatorData;
+
+            // Ajout des fichiers au ZIP
+            zip.file(data.routeName + '.html', window.generatedFiles.html);
+            zip.file('routes_to_add.py', window.generatedFiles.python);
+            zip.file('static/css/salesforce-flow.css', window.generatedFiles.css);
+            zip.file('static/js/salesforce-flow.js', window.generatedFiles.js);
+            zip.file('README.md', window.generatedFiles.readme);
+
+            // Génération et téléchargement
+            const content = await zip.generateAsync({type: "blob"});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = data.siteName.toLowerCase().replace(/\s+/g, '-') + '-site.zip';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Validation en temps réel
+        document.addEventListener('DOMContentLoaded', function() {
+            const routeNameInput = document.getElementById('routeName');
+            const flowApiInput = document.getElementById('flowApiName');
+
+            if (routeNameInput) {
+                routeNameInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^a-zA-Z0-9_-]/g, '');
+                });
+            }
+
+            if (flowApiInput) {
+                flowApiInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^a-zA-Z0-9_]/g, '');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

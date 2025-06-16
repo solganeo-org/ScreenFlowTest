@@ -421,6 +421,21 @@ def cleanup_expired_otps():
         # En mode debug, on pourrait logger le nettoyage
         # print(f"Nettoyage automatique: {cleaned_count} éléments supprimés")
 
+@app.route("/pdf")
+def pdf():
+    """
+    Route protégée - display pdf
+    Nécessite une authentification OTP valide
+    """
+    if not is_session_valid():
+        return redirect(url_for("auth_otp"))
+    
+    renew_session()
+    session_status = get_session_status()
+    
+    return render_template("pdf.html", session_status=session_status)
+
+
 if __name__ == "__main__":
     # Configuration pour le démarrage de l'application
     

@@ -1,0 +1,60 @@
+{% extends "base_user.html" %}
+
+{% block title %}display pdf{% endblock %}
+
+{% block description %}affichage doc{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/salesforce-flow.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="flow-welcome animate-in">
+  <h2>display pdf</h2>
+  <p>affichage doc</p>
+  <div class="flow-badge">
+    <span>🔒</span>
+    Session sécurisée pour {{ session.get('otp_email_verified', 'utilisateur') }}
+  </div>
+</div>
+
+<div class="main-flow-container">
+  <div class="flow-card animate-in" id="flowContainer">
+    <div class="flow-header">
+      <h3 class="flow-title">
+        <span class="flow-icon">⚡</span>
+        Flow Salesforce Intégré
+      </h3>
+      <p class="flow-description">
+        Accédez directement à vos outils Salesforce
+      </p>
+    </div>
+    <div class="flow-content" id="salesforceFlowContent">
+      <div class="flow-loading" id="flowLoading">
+        <div class="flow-spinner"></div>
+        <p>Chargement du Flow Salesforce...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pyro">
+  <div class="before"></div>
+  <div class="after"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://solganeo--carboneio.sandbox.lightning.force.com/lightning/lightning.out.js"></script>
+<script src="{{ url_for('static', filename='js/salesforce-flow.js') }}"></script>
+<script>
+  const FLOW_CONFIG = {
+    apiName: "pdf",
+    siteName: "display pdf"
+  };
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    initializeSalesforceFlow(FLOW_CONFIG);
+  });
+</script>
+{% endblock %}
