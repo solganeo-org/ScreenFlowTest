@@ -776,13 +776,31 @@
             htmlContent += '<script src="https://solganeo--carboneio.sandbox.lightning.force.com/lightning/lightning.out.js"><\/script>\n';
             htmlContent += '<script src="{{ url_for(\'static\', filename=\'js/salesforce-flow.js\') }}"><\/script>\n';
             htmlContent += '<script>\n';
-            htmlContent += '  const FLOW_CONFIG = {\n';
-            htmlContent += '    apiName: "c:' + data.lightningAppName + '",\n';
-            htmlContent += '    siteName: "' + data.siteName + '"\n';
-            htmlContent += '  };\n';
-            htmlContent += '  \n';
+            htmlContent += '  // Configuration spécifique à cette page\n';
             htmlContent += '  document.addEventListener(\'DOMContentLoaded\', function() {\n';
-            htmlContent += '    initializeSalesforceFlow(FLOW_CONFIG);\n';
+            htmlContent += '    // Vérifier que Lightning est chargé\n';
+            htmlContent += '    if (typeof $Lightning === "undefined") {\n';
+            htmlContent += '      console.error("Lightning framework non chargé");\n';
+            htmlContent += '      showLoadingError();\n';
+            htmlContent += '      return;\n';
+            htmlContent += '    }\n';
+            htmlContent += '    \n';
+            htmlContent += '    // Initialisation du Flow spécifique à cette page\n';
+            htmlContent += '    $Lightning.use("c:' + data.lightningAppName + '", function() {\n';
+            htmlContent += '      const loadingElement = document.getElementById("flowLoading");\n';
+            htmlContent += '      if (loadingElement) {\n';
+            htmlContent += '        loadingElement.style.display = "none";\n';
+            htmlContent += '      }\n';
+            htmlContent += '      \n';
+            htmlContent += '      $Lightning.createComponent("c:' + data.lightningComponentName + '", {}, "salesforceFlowContent");\n';
+            htmlContent += '      \n';
+            htmlContent += '      // Appliquer les styles après chargement\n';
+            htmlContent += '      setTimeout(function() {\n';
+            htmlContent += '        applyFlowStyling();\n';
+            htmlContent += '        setupFlowObserver();\n';
+            htmlContent += '      }, 1500);\n';
+            htmlContent += '      \n';
+            htmlContent += '    }, "https://solganeo--carboneio.sandbox.my.salesforce-sites.com");\n';
             htmlContent += '  });\n';
             htmlContent += '<\/script>\n';
             htmlContent += '{% endblock %}';
@@ -965,30 +983,67 @@
             const data = generatorData;
             
             window.generatedFiles.js = '// JavaScript commun pour les Flow Salesforce\n\n' +
-                'function initializeSalesforceFlow(config) {\n' +
-                '  if (typeof $Lightning === "undefined") {\n' +
-                '    console.error("Lightning framework non chargé");\n' +
-                '    return;\n' +
-                '  }\n' +
-                '  \n' +
-                '  $Lightning.use(config.apiName, function() {\n' +
-                '    const loadingElement = document.getElementById("flowLoading");\n' +
-                '    if (loadingElement) {\n' +
-                '      loadingElement.style.display = "none";\n' +
-                '    }\n' +
-                '    \n' +
-                '    $Lightning.createComponent("c:' + data.lightningComponentName + '", {}, "salesforceFlowContent");\n' +
-                '  }, "https://solganeo--carboneio.sandbox.my.salesforce-sites.com");\n' +
-                '}\n\n' +
+                '/**\n' +
+                ' * Fonctions utilitaires pour les Flow Salesforce\n' +
+                ' */\n\n' +
                 'function applyFlowStyling() {\n' +
                 '  const flowEl = document.querySelector("flowruntime-flow");\n' +
                 '  \n' +
                 '  if (flowEl && flowEl.shadowRoot) {\n' +
                 '    const style = document.createElement("style");\n' +
-                '    style.textContent = "/* Styles personnalisés pour le Flow */";\n' +
+                '    style.textContent = "\\n' +
+                '      /* Styles personnalisés pour le Flow */\\n' +
+                '      button.slds-button_brand {\\n' +
+                '        background-color: var(--primary) !important;\\n' +
+                '        border: none !important;\\n' +
+                '        border-radius: var(--radius-md) !important;\\n' +
+                '        padding: 0.875rem 1.75rem !important;\\n' +
+                '        font-weight: 600 !important;\\n' +
+                '        color: white !important;\\n' +
+                '        transition: all 0.3s ease !important;\\n' +
+                '      }\\n' +
+                '      button.slds-button_brand:hover {\\n' +
+                '        background-color: var(--primary-dark) !important;\\n' +
+                '        transform: translateY(-2px) !important;\\n' +
+                '      }\\n' +
+                '      input, select, textarea {\\n' +
+                '        border-radius: var(--radius-md) !important;\\n' +
+                '        border: 1px solid var(--border) !important;\\n' +
+                '        padding: 0.875rem 1rem !important;\\n' +
+                '      }\\n' +
+                '    ";\n' +
                 '    flowEl.shadowRoot.appendChild(style);\n' +
                 '  }\n' +
                 '}\n\n' +
+                'function setupFlowObserver() {\n' +
+                '  const flowEl = document.querySelector("flowruntime-flow");\n' +
+                '  \n' +
+                '  if (flowEl && flowEl.shadowRoot) {\n' +
+                '    const observer = new MutationObserver(function(mutations) {\n' +
+                '      const footerButtons = flowEl.shadowRoot.querySelectorAll("footer button");\n' +
+                '      footerButtons.forEach(function(button) {\n' +
+                '        if (button.textContent.includes("Finish") && !button.hasAttribute("data-enhanced")) {\n' +
+                '          button.setAttribute("data-enhanced", "true");\n' +
+                '          button.addEventListener("click", function() {\n' +
+                '            console.log("Flow terminé avec succès !");\n' +
+                '          });\n' +
+                '        }\n' +
+                '      });\n' +
+                '    });\n' +
+                '    \n' +
+                '    observer.observe(flowEl.shadowRoot, {\n' +
+                '      childList: true,\n' +
+                '      subtree: true\n' +
+                '    });\n' +
+                '  }\n' +
+                '}\n\n' +
+                'function showLoadingError() {\n' +
+                '  const loadingElement = document.getElementById("flowLoading");\n' +
+                '  if (loadingElement) {\n' +
+                '    loadingElement.innerHTML = "<div style=\\"color: red; text-align: center;\\"><p>Erreur de chargement du Flow Salesforce</p></div>";\n' +
+                '  }\n' +
+                '}\n\n' +
+                '// Initialisation commune\n' +
                 'document.addEventListener("DOMContentLoaded", function() {\n' +
                 '  console.log("Page chargée - Flow Salesforce prêt");\n' +
                 '  \n' +
