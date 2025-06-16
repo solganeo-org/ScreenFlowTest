@@ -12,7 +12,7 @@ function initializeSalesforceFlow(config) {
       loadingElement.style.display = "none";
     }
     
-    $Lightning.createComponent("c:qsqs", {}, "salesforceFlowContent");
+    $Lightning.createComponent("c:pdf", {}, "salesforceFlowContent");
   }, "https://solganeo--carboneio.sandbox.my.salesforce-sites.com");
 }
 
