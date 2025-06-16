@@ -984,7 +984,7 @@
             
             window.generatedFiles.js = '// JavaScript commun pour les Flow Salesforce\n\n' +
                 '/**\n' +
-                ' * Fonctions utilitaires pour les Flow Salesforce\n' +
+                ' * Fonctions utilitaires réutilisables pour tous les Flow Salesforce\n' +
                 ' */\n\n' +
                 'function applyFlowStyling() {\n' +
                 '  const flowEl = document.querySelector("flowruntime-flow");\n' +
@@ -1026,6 +1026,7 @@
                 '          button.setAttribute("data-enhanced", "true");\n' +
                 '          button.addEventListener("click", function() {\n' +
                 '            console.log("Flow terminé avec succès !");\n' +
+                '            // Ici on peut ajouter des actions personnalisées\n' +
                 '          });\n' +
                 '        }\n' +
                 '      });\n' +
@@ -1043,14 +1044,16 @@
                 '    loadingElement.innerHTML = "<div style=\\"color: red; text-align: center;\\"><p>Erreur de chargement du Flow Salesforce</p></div>";\n' +
                 '  }\n' +
                 '}\n\n' +
-                '// Initialisation commune\n' +
-                'document.addEventListener("DOMContentLoaded", function() {\n' +
-                '  console.log("Page chargée - Flow Salesforce prêt");\n' +
-                '  \n' +
-                '  // Animation des éléments au chargement\n' +
+                '// Utilitaires d\'animation\n' +
+                'function animateElements() {\n' +
                 '  document.querySelectorAll(".animate-in").forEach(function(element, index) {\n' +
                 '    element.style.animationDelay = (index * 0.1) + "s";\n' +
                 '  });\n' +
+                '}\n\n' +
+                '// Initialisation commune (pas de logique Lightning ici)\n' +
+                'document.addEventListener("DOMContentLoaded", function() {\n' +
+                '  console.log("Utilitaires Salesforce Flow chargés");\n' +
+                '  animateElements();\n' +
                 '});';
         }
 

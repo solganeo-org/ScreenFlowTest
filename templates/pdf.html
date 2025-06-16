@@ -48,13 +48,31 @@
 <script src="https://solganeo--carboneio.sandbox.lightning.force.com/lightning/lightning.out.js"></script>
 <script src="{{ url_for('static', filename='js/salesforce-flow.js') }}"></script>
 <script>
-  const FLOW_CONFIG = {
-    apiName: "c:pdfApp",
-    siteName: "pdf"
-  };
-  
+  // Configuration spécifique à cette page
   document.addEventListener('DOMContentLoaded', function() {
-    initializeSalesforceFlow(FLOW_CONFIG);
+    // Vérifier que Lightning est chargé
+    if (typeof $Lightning === "undefined") {
+      console.error("Lightning framework non chargé");
+      showLoadingError();
+      return;
+    }
+    
+    // Initialisation du Flow spécifique à cette page
+    $Lightning.use("c:pdfApp", function() {
+      const loadingElement = document.getElementById("flowLoading");
+      if (loadingElement) {
+        loadingElement.style.display = "none";
+      }
+      
+      $Lightning.createComponent("c:pdf", {}, "salesforceFlowContent");
+      
+      // Appliquer les styles après chargement
+      setTimeout(function() {
+        applyFlowStyling();
+        setupFlowObserver();
+      }, 1500);
+      
+    }, "https://solganeo--carboneio.sandbox.my.salesforce-sites.com");
   });
 </script>
 {% endblock %}
