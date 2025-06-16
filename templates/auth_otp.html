@@ -1,0 +1,613 @@
+{% extends "base_guest.html" %}
+
+{% block title %}Authentification OTP{% endblock %}
+
+{% block description %}Authentification sécurisée par code de vérification temporaire - Portail CNOEC{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* === STYLES SPÉCIFIQUES À L'AUTHENTIFICATION OTP === */
+  
+  .auth-step {
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+  }
+  
+  .auth-step.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .step-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .step-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-md);
+  }
+  
+  .step-icon.success {
+    background: linear-gradient(135deg, var(--success) 0%, #2d7a57 100%);
+  }
+  
+  .step-title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .step-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  
+  .auth-form {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-label {
+    display: block;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    font-size: var(--font-size-sm);
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-md);
+    transition: var(--transition-fast);
+    background-color: rgba(248, 250, 253, 0.8);
+  }
+  
+  .form-input:focus {
+    outline: none;
+    border-color: var(--secondary);
+    box-shadow: var(--shadow-focus);
+    background-color: var(--background-light);
+  }
+  
+  .otp-input-container {
+    position: relative;
+  }
+  
+  .otp-input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 0.5em;
+    transition: var(--transition-fast);
+    background-color: rgba(248, 250, 253, 0.8);
+  }
+  
+  .otp-input:focus {
+    outline: none;
+    border-color: var(--secondary);
+    box-shadow: var(--shadow-focus);
+    background-color: var(--background-light);
+  }
+  
+  .form-help {
+    font-size: var(--font-size-sm);
+    color: var(--text-tertiary);
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+  
+  .form-button {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: var(--transition-normal);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(0, 46, 95, 0.15);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .form-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 46, 95, 0.2);
+  }
+  
+  .form-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .form-button.secondary {
+    background: linear-gradient(135deg, var(--text-secondary) 0%, var(--text-primary) 100%);
+    box-shadow: 0 4px 12px rgba(40, 55, 71, 0.15);
+  }
+  
+  .form-button.secondary:hover:not(:disabled) {
+    box-shadow: 0 6px 16px rgba(40, 55, 71, 0.2);
+  }
+  
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .spinner {
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  .back-link {
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+  
+  .link-button {
+    background: none;
+    border: none;
+    color: var(--secondary);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    text-decoration: underline;
+    transition: var(--transition-fast);
+  }
+  
+  .link-button:hover {
+    color: var(--primary);
+  }
+  
+  .alert {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    text-align: center;
+  }
+  
+  .alert.success {
+    background-color: rgba(40, 110, 74, 0.1);
+    border: 1px solid rgba(40, 110, 74, 0.2);
+    color: var(--success);
+  }
+  
+  .alert.error {
+    background-color: rgba(178, 58, 72, 0.1);
+    border: 1px solid rgba(178, 58, 72, 0.2);
+    color: var(--error);
+  }
+  
+  .alert.info {
+    background-color: rgba(0, 84, 166, 0.1);
+    border: 1px solid rgba(0, 84, 166, 0.2);
+    color: var(--secondary);
+  }
+  
+  #countdown {
+    font-weight: 600;
+    color: var(--warning);
+  }
+  
+  /* === RESPONSIVE === */
+  
+  @media (max-width: 768px) {
+    .step-icon {
+      width: 56px;
+      height: 56px;
+    }
+    
+    .auth-form {
+      max-width: 100%;
+    }
+    
+    .otp-input {
+      font-size: 1.25rem;
+      letter-spacing: 0.3em;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main-title-container animate-in">
+  <h1 class="main-title">
+    Authentification <span class="main-title-highlight">Sécurisée</span>
+  </h1>
+  <p class="main-subtitle">Accès protégé par code de vérification temporaire</p>
+  <div class="separator"></div>
+</div>
+
+<div class="card-container">
+  <div class="card animate-in" id="authCard">
+    
+    <!-- Étape 1: Saisie de l'adresse email -->
+    <div id="emailStep" class="auth-step active">
+      <div class="step-header">
+        <div class="step-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 7V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V7M3 7C3 5.89543 3.89543 5 5 5H19C20.1046 5 21 5.89543 21 7M3 7L12 13L21 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="step-title">Étape 1 : Adresse Email</h3>
+        <p class="step-description">Saisissez votre adresse email professionnelle pour recevoir le code de vérification</p>
+      </div>
+      
+      <form id="emailForm" class="auth-form">
+        <div class="form-group">
+          <label for="email" class="form-label">Adresse Email Professionnelle</label>
+          <input type="email" id="email" name="email" class="form-input" 
+                 placeholder="prenom.nom@domaine.com" required
+                 autocomplete="email">
+          <div class="form-help">
+            Domaines autorisés : solganeo.com, experts-comptables.org
+          </div>
+        </div>
+        
+        <button type="submit" class="form-button" id="sendOtpBtn">
+          <span class="button-text">Envoyer le Code</span>
+          <span class="button-loader" style="display: none;">
+            <svg class="spinner" width="20" height="20" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="60" stroke-dashoffset="60">
+                <animate attributeName="stroke-dasharray" dur="2s" values="0 60;30 30;0 60" repeatCount="indefinite"/>
+                <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15;-30" repeatCount="indefinite"/>
+              </circle>
+            </svg>
+          </span>
+        </button>
+      </form>
+    </div>
+    
+    <!-- Étape 2: Saisie du code OTP -->
+    <div id="otpStep" class="auth-step">
+      <div class="step-header">
+        <div class="step-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="step-title">Étape 2 : Code de Vérification</h3>
+        <p class="step-description">
+          Saisissez le code à 6 chiffres reçu par email à <strong id="displayEmail"></strong>
+        </p>
+      </div>
+      
+      <form id="otpForm" class="auth-form">
+        <div class="form-group">
+          <label for="otp" class="form-label">Code de Vérification</label>
+          <div class="otp-input-container">
+            <input type="text" id="otp" name="otp" class="otp-input" 
+                   placeholder="000000" maxlength="6" pattern="[0-9]{6}" required
+                   autocomplete="one-time-code">
+          </div>
+          <div class="form-help">
+            Code à 6 chiffres • Expire dans <span id="countdown">5:00</span>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="form-button" id="verifyOtpBtn">
+            <span class="button-text">Vérifier le Code</span>
+            <span class="button-loader" style="display: none;">
+              <svg class="spinner" width="20" height="20" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="60" stroke-dashoffset="60">
+                  <animate attributeName="stroke-dasharray" dur="2s" values="0 60;30 30;0 60" repeatCount="indefinite"/>
+                  <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15;-30" repeatCount="indefinite"/>
+                </circle>
+              </svg>
+            </span>
+          </button>
+          
+          <button type="button" class="form-button secondary" id="resendBtn" disabled>
+            Renvoyer un Code
+          </button>
+        </div>
+      </form>
+      
+      <div class="back-link">
+        <button type="button" onclick="goBackToEmail()" class="link-button">
+          ← Modifier l'adresse email
+        </button>
+      </div>
+    </div>
+    
+    <!-- Étape 3: Succès -->
+    <div id="successStep" class="auth-step">
+      <div class="step-header success">
+        <div class="step-icon success">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="step-title">Authentification Réussie</h3>
+        <p class="step-description">
+          Redirection vers le portail sécurisé en cours...
+        </p>
+      </div>
+    </div>
+    
+    <!-- Zone d'affichage des messages -->
+    <div id="alertMessage" class="alert" style="display: none;"></div>
+    
+  </div>
+  <div class="card-shadow"></div>
+</div>
+
+<!-- Container pour les feux d'artifice -->
+<div class="pyro">
+  <div class="before"></div>
+  <div class="after"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Variables globales pour l'authentification OTP
+  let countdownTimer;
+  let countdownSeconds = 300; // 5 minutes
+  
+  // Éléments DOM
+  const emailStep = document.getElementById('emailStep');
+  const otpStep = document.getElementById('otpStep');
+  const successStep = document.getElementById('successStep');
+  const emailForm = document.getElementById('emailForm');
+  const otpForm = document.getElementById('otpForm');
+  const emailInput = document.getElementById('email');
+  const otpInput = document.getElementById('otp');
+  const displayEmail = document.getElementById('displayEmail');
+  const alertMessage = document.getElementById('alertMessage');
+  const sendOtpBtn = document.getElementById('sendOtpBtn');
+  const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+  const resendBtn = document.getElementById('resendBtn');
+  const countdown = document.getElementById('countdown');
+  
+  // Fonctions utilitaires
+  function showStep(step) {
+    document.querySelectorAll('.auth-step').forEach(s => s.classList.remove('active'));
+    step.classList.add('active');
+  }
+  
+  function showAlert(message, type = 'info') {
+    alertMessage.textContent = message;
+    alertMessage.className = `alert ${type}`;
+    alertMessage.style.display = 'block';
+    
+    setTimeout(() => {
+      alertMessage.style.display = 'none';
+    }, 5000);
+  }
+  
+  function setButtonLoading(button, loading) {
+    const text = button.querySelector('.button-text');
+    const loader = button.querySelector('.button-loader');
+    
+    if (loading) {
+      text.style.display = 'none';
+      loader.style.display = 'inline-block';
+      button.disabled = true;
+    } else {
+      text.style.display = 'inline-block';
+      loader.style.display = 'none';
+      button.disabled = false;
+    }
+  }
+  
+  // Gestion du countdown
+  function startCountdown() {
+    countdownSeconds = 300;
+    updateCountdownDisplay();
+    
+    countdownTimer = setInterval(() => {
+      countdownSeconds--;
+      updateCountdownDisplay();
+      
+      if (countdownSeconds <= 0) {
+        clearInterval(countdownTimer);
+        showAlert('Le code a expiré. Veuillez en demander un nouveau.', 'error');
+        resendBtn.disabled = false;
+      }
+      
+      if (countdownSeconds <= 240) {
+        resendBtn.disabled = false;
+      }
+    }, 1000);
+  }
+  
+  function updateCountdownDisplay() {
+    const minutes = Math.floor(countdownSeconds / 60);
+    const seconds = countdownSeconds % 60;
+    countdown.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  }
+  
+  // Gestion des formulaires
+  emailForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const email = emailInput.value.trim();
+    if (!email) {
+      showAlert('Veuillez saisir une adresse email valide.', 'error');
+      return;
+    }
+    
+    setButtonLoading(sendOtpBtn, true);
+    
+    try {
+      const response = await fetch('/api/send-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        displayEmail.textContent = email;
+        showStep(otpStep);
+        startCountdown();
+        showAlert(data.message, 'success');
+        
+        setTimeout(() => otpInput.focus(), 100);
+      } else {
+        showAlert(data.message, 'error');
+      }
+    } catch (error) {
+      showAlert('Erreur de connexion. Veuillez réessayer.', 'error');
+    } finally {
+      setButtonLoading(sendOtpBtn, false);
+    }
+  });
+  
+  otpForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const otp = otpInput.value.trim();
+    if (otp.length !== 6) {
+      showAlert('Le code doit contenir exactement 6 chiffres.', 'error');
+      return;
+    }
+    
+    setButtonLoading(verifyOtpBtn, true);
+    
+    try {
+      const response = await fetch('/api/verify-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ otp: otp })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        clearInterval(countdownTimer);
+        showStep(successStep);
+        showFireworks();
+        
+        setTimeout(() => {
+          window.location.href = data.redirect_url || '/';
+        }, 2000);
+      } else {
+        showAlert(data.message, 'error');
+        otpInput.value = '';
+        otpInput.focus();
+      }
+    } catch (error) {
+      showAlert('Erreur de connexion. Veuillez réessayer.', 'error');
+    } finally {
+      setButtonLoading(verifyOtpBtn, false);
+    }
+  });
+  
+  resendBtn.addEventListener('click', async function() {
+    const email = emailInput.value.trim();
+    
+    setButtonLoading(resendBtn, true);
+    
+    try {
+      const response = await fetch('/api/send-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        clearInterval(countdownTimer);
+        startCountdown();
+        resendBtn.disabled = true;
+        showAlert('Nouveau code envoyé avec succès.', 'success');
+      } else {
+        showAlert(data.message, 'error');
+      }
+    } catch (error) {
+      showAlert('Erreur de connexion. Veuillez réessayer.', 'error');
+    } finally {
+      setButtonLoading(resendBtn, false);
+    }
+  });
+  
+  function goBackToEmail() {
+    clearInterval(countdownTimer);
+    showStep(emailStep);
+    otpInput.value = '';
+    alertMessage.style.display = 'none';
+  }
+  
+  otpInput.addEventListener('input', function(e) {
+    e.target.value = e.target.value.replace(/[^0-9]/g, '');
+    
+    if (e.target.value.length === 6) {
+      setTimeout(() => {
+        otpForm.dispatchEvent(new Event('submit'));
+      }, 500);
+    }
+  });
+  
+  function showFireworks() {
+    const pyro = document.querySelector('.pyro');
+    pyro.style.display = 'block';
+    
+    setTimeout(() => {
+      pyro.style.display = 'none';
+    }, 3000);
+  }
+  
+  // Initialisation
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.animate-in').forEach((element, index) => {
+      element.style.animationDelay = (index * 0.1) + 's';
+    });
+    
+    emailInput.focus();
+  });
+  
+  window.addEventListener('beforeunload', function() {
+    if (countdownTimer) clearInterval(countdownTimer);
+  });
+</script>
+{% endblock %}

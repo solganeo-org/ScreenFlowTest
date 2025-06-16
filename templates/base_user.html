@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{% block description %}Portail sécurisé - Conseil national de l'ordre des experts-comptables{% endblock %}">
+  <title>{% block title %}Portail CNOEC{% endblock %} | Conseil national de l'ordre des experts-comptables</title>
+  
+  <!-- Polices Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS CNOEC -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/utilities.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+  <!-- AJOUTER CETTE LIGNE EN DERNIER -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/header-footer-override.css') }}">
+  <!-- CSS additionnel -->
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <div class="page-wrapper">
+    <!-- Ligne décorative supérieure -->
+    <div class="top-line"></div>
+    
+    <!-- === HEADER POUR UTILISATEURS CONNECTÉS === -->
+    <header class="main-header authenticated">
+      <div class="header-container">
+        <!-- Logo CNOEC -->
+        <div class="header-logo">
+          <a href="/">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Conseil national de l'ordre des experts-comptables" class="logo">
+          </a>
+        </div>
+        
+        <!-- Navigation pour utilisateurs connectés -->
+        <nav class="header-nav">
+          <ul class="nav-list">
+            <li class="nav-item">
+              <a href="/" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">
+                <span class="nav-icon">🏠</span>
+                Accueil
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/profile" class="nav-link {% if request.endpoint == 'profile' %}active{% endif %}">
+                <span class="nav-icon">👤</span>
+                Profil
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/documents" class="nav-link {% if request.endpoint == 'documents' %}active{% endif %}">
+                <span class="nav-icon">📄</span>
+                Documents
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/tools" class="nav-link {% if request.endpoint == 'tools' %}active{% endif %}">
+                <span class="nav-icon">🛠️</span>
+                Outils
+              </a>
+            </li>
+          </ul>
+        </nav>
+        
+        <!-- Informations utilisateur connecté -->
+        <div class="header-user">
+          <div class="user-info">
+            <span class="user-email">{{ session.get('otp_email_verified', 'Utilisateur') }}</span>
+            <div class="user-status">
+              <span class="status-dot"></span>
+              Connecté
+            </div>
+          </div>
+          
+          <!-- Dropdown utilisateur -->
+          <div class="user-dropdown">
+            <button class="user-avatar" onclick="toggleUserDropdown()">
+              <span class="avatar-icon">👤</span>
+            </button>
+            
+            <div class="dropdown-menu" id="userDropdown">
+              <a href="/profile" class="dropdown-item">
+                <span class="dropdown-icon">⚙️</span>
+                Paramètres
+              </a>
+              <a href="/help" class="dropdown-item">
+                <span class="dropdown-icon">❓</span>
+                Aide
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="/logout" class="dropdown-item logout">
+                <span class="dropdown-icon">🚪</span>
+                Déconnexion
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Éléments décoratifs -->
+    <div class="background-decoration">
+      <div class="decoration-circle decoration-circle-1"></div>
+      <div class="decoration-circle decoration-circle-2"></div>
+    </div>
+    
+    <!-- Contenu principal (block dynamique) -->
+    <main class="page-content">
+      {% block content %}
+      <!-- Le contenu de chaque page sera injecté ici -->
+      {% endblock %}
+    </main>
+    
+    <!-- === FOOTER POUR UTILISATEURS CONNECTÉS === -->
+    <footer class="main-footer authenticated">
+      <div class="footer-container">
+        <!-- Section navigation rapide -->
+        <div class="footer-section">
+          <h5 class="footer-subtitle">Navigation rapide</h5>
+          <ul class="footer-links">
+            <li><a href="/" class="footer-link">Tableau de bord</a></li>
+            <li><a href="/documents" class="footer-link">Mes documents</a></li>
+            <li><a href="/profile" class="footer-link">Mon profil</a></li>
+            <li><a href="/tools" class="footer-link">Outils</a></li>
+          </ul>
+        </div>
+        
+        <!-- Section support -->
+        <div class="footer-section">
+          <h5 class="footer-subtitle">Support & Aide</h5>
+          <ul class="footer-links">
+            <li><a href="/help" class="footer-link">Centre d'aide</a></li>
+            <li><a href="/faq" class="footer-link">FAQ</a></li>
+            <li><a href="mailto:support@cnoec.fr" class="footer-link">Contacter le support</a></li>
+            <li><a href="/tutorials" class="footer-link">Tutoriels</a></li>
+          </ul>
+        </div>
+        
+        <!-- Section informations compte -->
+        <div class="footer-section">
+          <h5 class="footer-subtitle">Mon compte</h5>
+          <ul class="footer-links">
+            <li><a href="/profile" class="footer-link">Paramètres du compte</a></li>
+            <li><a href="/security" class="footer-link">Sécurité</a></li>
+            <li><a href="/privacy" class="footer-link">Confidentialité</a></li>
+            <li><a href="/logout" class="footer-link">Se déconnecter</a></li>
+          </ul>
+        </div>
+        
+        <!-- Section statut de session -->
+        <div class="footer-section">
+          <h5 class="footer-subtitle">Session active</h5>
+          <div class="session-info">
+            <p class="session-detail">
+              <span class="session-icon">👤</span>
+              {{ session.get('otp_email_verified', 'Utilisateur connecté') }}
+            </p>
+            <p class="session-detail">
+              <span class="session-icon">⏰</span>
+              Session expire dans <span id="sessionTimer">--:--</span>
+            </p>
+            <p class="session-detail">
+              <span class="session-icon">🔒</span>
+              Connexion sécurisée
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Copyright et informations techniques -->
+      <div class="footer-bottom">
+        <div class="footer-container">
+          <p class="footer-copyright">
+            © 2025 CNOEC - Session de {{ session.get('otp_email_verified', 'utilisateur') }}
+          </p>
+          <div class="footer-tech">
+            <span class="tech-info">🔒 SSL/TLS</span>
+            <span class="tech-info">⚡ Session active</span>
+            <span class="tech-info">🛡️ Protégé par OTP</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- Popup de warning de session (pour utilisateurs connectés) -->
+  <div id="sessionWarningPopup" class="popup-overlay" style="display: none;">
+    <div class="popup-content">
+      <div class="popup-header">
+        <div class="popup-icon">⏰</div>
+        <h3 class="popup-title">Session Expiration</h3>
+      </div>
+      <div class="popup-body">
+        <p class="popup-message">
+          Votre session expire dans <span id="popupMinutes">15</span> minutes.
+        </p>
+        <p class="popup-description">
+          Cliquez sur "Continuer" pour prolonger votre session de travail.
+        </p>
+      </div>
+      <div class="popup-actions">
+        <button class="popup-button primary" onclick="continueSession()">
+          <span class="button-icon">🔄</span>
+          Continuer à Travailler
+        </button>
+        <button class="popup-button secondary" onclick="logoutNow()">
+          <span class="button-icon">🚪</span>
+          Se Déconnecter
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- JavaScript pour utilisateurs connectés -->
+  <script>
+    // Gestion du dropdown utilisateur
+    function toggleUserDropdown() {
+      const dropdown = document.getElementById('userDropdown');
+      dropdown.classList.toggle('show');
+    }
+    
+    // Fermer le dropdown si clic ailleurs
+    document.addEventListener('click', function(e) {
+      if (!e.target.matches('.user-avatar') && !e.target.closest('.user-dropdown')) {
+        const dropdown = document.getElementById('userDropdown');
+        dropdown.classList.remove('show');
+      }
+    });
+    
+    // Gestion de session (fonctions existantes)
+    function continueSession() {
+      document.getElementById('sessionWarningPopup').style.display = 'none';
+      // Appel API pour renouveler la session
+      fetch('/api/session-status').then(() => {
+        showAlert('Session prolongée de 2 heures.', 'success');
+      });
+    }
+    
+    function logoutNow() {
+      window.location.href = '/logout';
+    }
+    
+    function showAlert(message, type) {
+      // Fonction d'alerte simple (peut être améliorée)
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert ${type}`;
+      alertDiv.textContent = message;
+      alertDiv.style.position = 'fixed';
+      alertDiv.style.top = '20px';
+      alertDiv.style.right = '20px';
+      alertDiv.style.zIndex = '9999';
+      alertDiv.style.padding = '1rem';
+      alertDiv.style.borderRadius = '8px';
+      alertDiv.style.backgroundColor = type === 'success' ? '#d4edda' : '#f8d7da';
+      alertDiv.style.color = type === 'success' ? '#155724' : '#721c24';
+      
+      document.body.appendChild(alertDiv);
+      
+      setTimeout(() => {
+        document.body.removeChild(alertDiv);
+      }, 3000);
+    }
+    
+    // Vérification périodique de session
+    let sessionCheckTimer = setInterval(async function() {
+      try {
+        const response = await fetch('/api/session-status');
+        const sessionData = await response.json();
+        
+        if (sessionData.valid && sessionData.warning) {
+          document.getElementById('popupMinutes').textContent = sessionData.expires_in_minutes;
+          document.getElementById('sessionWarningPopup').style.display = 'flex';
+        }
+        
+        // Mise à jour du timer dans le footer
+        if (sessionData.valid) {
+          const minutes = sessionData.expires_in_minutes;
+          const hours = Math.floor(minutes / 60);
+          const mins = minutes % 60;
+          document.getElementById('sessionTimer').textContent = `${hours}:${mins.toString().padStart(2, '0')}`;
+        }
+      } catch (error) {
+        console.error('Erreur vérification session:', error);
+      }
+    }, 60000); // Vérification toutes les minutes
+  </script>
+  
+  <!-- JavaScript additionnel -->
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

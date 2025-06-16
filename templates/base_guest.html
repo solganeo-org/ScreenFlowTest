@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{% block description %}Conseil national de l'ordre des experts-comptables{% endblock %}">
+  <title>{% block title %}CNOEC{% endblock %} | Conseil national de l'ordre des experts-comptables</title>
+  
+  <!-- Polices Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS CNOEC -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/utilities.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+  <!-- AJOUTER CETTE LIGNE EN DERNIER -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/header-footer-override.css') }}">
+  
+  <!-- CSS additionnel pour les pages -->
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <div class="page-wrapper">
+    <!-- Ligne décorative supérieure -->
+    <div class="top-line"></div>
+    
+    <!-- === HEADER POUR UTILISATEURS NON CONNECTÉS === -->
+    <header class="main-header">
+      <div class="header-container">
+        <!-- Logo CNOEC -->
+        <div class="header-logo">
+          <a href="/">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Conseil national de l'ordre des experts-comptables" class="logo">
+          </a>
+        </div>
+        
+        <!-- Navigation pour invités -->
+        <nav class="header-nav">
+          <ul class="nav-list">
+            <li class="nav-item">
+              <a href="/auth-otp" class="nav-link {% if request.endpoint == 'auth_otp' %}active{% endif %}">
+                <span class="nav-icon">🔐</span>
+                Connexion
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#about" class="nav-link">
+                <span class="nav-icon">ℹ️</span>
+                À propos
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#contact" class="nav-link">
+                <span class="nav-icon">📧</span>
+                Contact
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#help" class="nav-link">
+                <span class="nav-icon">❓</span>
+                Aide
+              </a>
+            </li>
+          </ul>
+        </nav>
+        
+        <!-- Bouton d'appel à l'action -->
+        <div class="header-cta">
+          <a href="/auth-otp" class="cta-button">
+            <span class="cta-icon">🚀</span>
+            Accéder au Portail
+          </a>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Éléments décoratifs -->
+    <div class="background-decoration">
+      <div class="decoration-circle decoration-circle-1"></div>
+      <div class="decoration-circle decoration-circle-2"></div>
+    </div>
+    
+    <!-- Contenu principal (block dynamique) -->
+    <main class="page-content">
+      {% block content %}
+      <!-- Le contenu de chaque page sera injecté ici -->
+      {% endblock %}
+    </main>
+    
+    <!-- === FOOTER POUR INVITÉS === -->
+    <footer class="main-footer">
+      <div class="footer-container">
+        <!-- Section informations -->
+        <div class="footer-section">
+          <h4 class="footer-title">Conseil National de l'Ordre des Experts-Comptables</h4>
+          <p class="footer-text">153 rue de Courcelles - 75017 Paris</p>
+          <p class="footer-text">Tél: 01 44 15 60 00</p>
+          <p class="footer-text">Email: contact@experts-comptables.fr</p>
+        </div>
+        
+        <!-- Section navigation -->
+        <div class="footer-section">
+          <h5 class="footer-subtitle">Navigation</h5>
+          <ul class="footer-links">
+            <li><a href="/auth-otp" class="footer-link">Se connecter</a></li>
+            <li><a href="#about" class="footer-link">À propos</a></li>
+            <li><a href="#services" class="footer-link">Nos services</a></li>
+            <li><a href="#news" class="footer-link">Actualités</a></li>
+          </ul>
+        </div>
+        
+        <!-- Section légale -->
+        <div class="footer-section">
+          <h5 class="footer-subtitle">Informations légales</h5>
+          <ul class="footer-links">
+            <li><a href="#mentions" class="footer-link">Mentions légales</a></li>
+            <li><a href="#privacy" class="footer-link">Politique de confidentialité</a></li>
+            <li><a href="#cookies" class="footer-link">Gestion des cookies</a></li>
+            <li><a href="#terms" class="footer-link">Conditions d'utilisation</a></li>
+          </ul>
+        </div>
+        
+        <!-- Section aide -->
+        <div class="footer-section">
+          <h5 class="footer-subtitle">Aide & Support</h5>
+          <ul class="footer-links">
+            <li><a href="#help" class="footer-link">Centre d'aide</a></li>
+            <li><a href="#faq" class="footer-link">FAQ</a></li>
+            <li><a href="mailto:support@cnoec.fr" class="footer-link">Support technique</a></li>
+            <li><a href="#documentation" class="footer-link">Documentation</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Copyright et sécurité -->
+      <div class="footer-bottom">
+        <div class="footer-container">
+          <p class="footer-copyright">
+            © 2025 Conseil National de l'Ordre des Experts-Comptables. Tous droits réservés.
+          </p>
+          <p class="footer-security">
+            <span class="security-icon">🔒</span>
+            Site sécurisé SSL/TLS
+          </p>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- JavaScript global -->
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

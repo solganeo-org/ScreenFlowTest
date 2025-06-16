@@ -1,276 +1,575 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Espace sécurisé - Conseil national de l'ordre des experts-comptables">
-  <title>Git Portail Sécurisé | Conseil national de l'ordre des experts-comptables</title>
+{% extends "base_user.html" %}
+
+{% block title %}Git Portail Sécurisé{% endblock %}
+
+{% block description %}Espace sécurisé - Conseil national de l'ordre des experts-comptables{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* === STYLES SPÉCIFIQUES AU FLOW SALESFORCE === */
   
-  <!-- Polices Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  .flow-welcome {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: var(--radius-xl);
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+  }
   
-  <!-- CSS avec chemins corrects -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/utilities.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+  .flow-welcome h2 {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
   
-  <!-- Script Lightning depuis le domaine Lightning -->
-  <script src="https://solganeo--carboneio.sandbox.lightning.force.com/lightning/lightning.out.js"></script>
-</head>
-<body>
-  <div class="page-wrapper">
-    <!-- Éléments décoratifs de l'arrière-plan -->
-    <div class="background-decoration">
-      <div class="decoration-circle decoration-circle-1"></div>
-      <div class="decoration-circle decoration-circle-2"></div>
+  .flow-welcome p {
+    opacity: 0.9;
+    font-size: var(--font-size-md);
+    margin-bottom: 1.5rem;
+  }
+  
+  .flow-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+  }
+  
+  .main-flow-container {
+    margin-bottom: 2rem;
+  }
+  
+  .flow-card {
+    background: var(--background-light);
+    border-radius: var(--radius-xl);
+    padding: 0;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .flow-header {
+    background: linear-gradient(135deg, rgba(0, 46, 95, 0.05) 0%, rgba(0, 84, 166, 0.05) 100%);
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+    text-align: center;
+  }
+  
+  .flow-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .flow-icon {
+    font-size: 1.5rem;
+  }
+  
+  .flow-description {
+    color: var(--text-secondary);
+    font-size: var(--font-size-md);
+    line-height: 1.6;
+  }
+  
+  .flow-content {
+    padding: 2rem;
+    min-height: 400px;
+    position: relative;
+  }
+  
+  .flow-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--text-tertiary);
+  }
+  
+  .flow-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top: 3px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Animation de succès pour le Flow */
+  .success-animation {
+    animation: successPulse 1.5s ease forwards;
+  }
+  
+  @keyframes successPulse {
+    0% {
+      box-shadow: var(--shadow-lg);
+    }
+    30% {
+      box-shadow: 0 0 0 20px rgba(200, 157, 81, 0.1), 0 0 0 40px rgba(200, 157, 81, 0.05);
+    }
+    100% {
+      box-shadow: var(--shadow-lg);
+    }
+  }
+  
+  /* Message de succès */
+  .success-message {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--success);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    opacity: 0;
+    transition: var(--transition-normal);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--shadow-md);
+  }
+  
+  .success-message.show {
+    opacity: 1;
+  }
+  
+  .success-message-icon {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: white;
+    position: relative;
+  }
+  
+  .success-message-icon::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%) rotate(45deg);
+    width: 6px;
+    height: 10px;
+    border-bottom: 2px solid var(--success);
+    border-right: 2px solid var(--success);
+  }
+  
+  /* Effet de parallaxe subtil pour la carte */
+  .flow-card {
+    transition: transform 0.1s ease-out;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .flow-welcome {
+      padding: 1.5rem;
+    }
+    
+    .flow-content {
+      padding: 1.5rem;
+    }
+    
+    .flow-title {
+      font-size: var(--font-size-lg);
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Message de bienvenue spécifique au Flow -->
+<div class="flow-welcome animate-in">
+  <h2>Authentification et Accès Sécurisé</h2>
+  <p>Espace réservé aux membres du Conseil national de l'ordre des experts-comptables</p>
+  <div class="flow-badge">
+    <span>🔒</span>
+    Session sécurisée pour {{ session.get('otp_email_verified', 'utilisateur') }}
+  </div>
+</div>
+
+<!-- Container principal du Flow Salesforce -->
+<div class="main-flow-container">
+  <div class="flow-card animate-in" id="flowContainer">
+    
+    <!-- Header du Flow -->
+    <div class="flow-header">
+      <h3 class="flow-title">
+        <span class="flow-icon">⚡</span>
+        Flow Salesforce Intégré
+      </h3>
+      <p class="flow-description">
+        Accédez directement à vos outils Salesforce depuis votre portail sécurisé
+      </p>
     </div>
     
-    <!-- Ligne décorative supérieure -->
-    <div class="top-line"></div>
-    
-    <!-- Header avec logo -->
-    <header class="site-header">
-      <div class="logo-container">
-        <!-- Logo officiel (remplacé par une version utilisant url_for) --> 
-        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Conseil national de l'ordre des experts-comptables" class="logo">
-      </div>
-    </header>
-    
-    <!-- Contenu principal -->
-    <main class="page-content">
-      <div class="main-title-container animate-in">
-        <h1 class="main-title">
-          Authentification et <span class="main-title-highlight">Accès Sécurisé</span>
-        </h1>
-        <p class="main-subtitle">Espace réservé aux membres du Conseil national de l'ordre des experts-comptables</p>
-        <div class="separator"></div>
+    <!-- Contenu du Flow -->
+    <div class="flow-content" id="salesforceFlowContent">
+      <!-- Indicateur de chargement -->
+      <div class="flow-loading" id="flowLoading">
+        <div class="flow-spinner"></div>
+        <p>Chargement du Flow Salesforce...</p>
       </div>
       
-      <div class="card-container">
-        <div class="card animate-in" id="flowContainer">
-          <!-- Le Flow Salesforce sera rendu ici -->
-        </div>
-        <div class="card-shadow"></div>
-      </div>
-    </main>
+      <!-- Le Flow Salesforce sera rendu ici -->
+    </div>
+    
   </div>
-  
-  <!-- Container pour les feux d'artifice -->
-  <div class="pyro">
-    <div class="before"></div>
-    <div class="after"></div>
-  </div>
+  <div class="card-shadow"></div>
+</div>
 
-  <script>
+<!-- Container pour les feux d'artifice -->
+<div class="pyro">
+  <div class="before"></div>
+  <div class="after"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Script Lightning depuis le domaine Lightning -->
+<script src="https://solganeo--carboneio.sandbox.lightning.force.com/lightning/lightning.out.js"></script>
+
+<script>
+  // === INITIALISATION DU FLOW SALESFORCE ===
+  
+  /**
+   * Initialisation automatique du Flow au chargement de la page
+   */
+  function initializeSalesforceFlow() {
+    // Vérifier que la librairie Lightning est chargée
+    if (typeof $Lightning === 'undefined') {
+      console.error('Lightning framework non chargé');
+      showLoadingError();
+      return;
+    }
+    
     // Initialisation du Flow Salesforce
     $Lightning.use("c:embeddedFlowApp", function() {
-      // Créer et monter le composant de Flow
-      $Lightning.createComponent("c:embeddedFlow", {}, "flowContainer");
+      // Masquer l'indicateur de chargement
+      const loadingElement = document.getElementById('flowLoading');
+      if (loadingElement) {
+        loadingElement.style.display = 'none';
+      }
       
-      // Animer les éléments au chargement
-      document.querySelectorAll('.animate-in').forEach((element, index) => {
-        element.style.animationDelay = (index * 0.1) + 's';
-      });
+      // Créer et monter le composant de Flow dans le contenu
+      $Lightning.createComponent("c:embeddedFlow", {}, "salesforceFlowContent");
       
-      // Attendre que le Flow charge et appliquer les styles personnalisés
+      // Attendre que le Flow charge et appliquer les styles personnalisés CNOEC
       setTimeout(() => {
-        const flowEl = document.querySelector("flowruntime-flow");
-  
-        if (flowEl && flowEl.shadowRoot) {
-          const style = document.createElement("style");
-          style.textContent = `
-            button.slds-button_brand {
-              background-color: var(--primary) !important;
-              border: none !important;
-              border-radius: var(--radius-md) !important;
-              padding: 0.875rem 1.75rem !important;
-              font-size: var(--font-size-sm) !important;
-              font-weight: 600 !important;
-              letter-spacing: 0.5px !important;
-              text-transform: uppercase !important;
-              color: white !important;
-              transition: var(--transition-normal) !important;
-              box-shadow: 0 4px 12px rgba(0, 46, 95, 0.15) !important;
-              position: relative !important;
-              overflow: hidden !important;
-            }
-  
-            button.slds-button_brand:hover {
-              background-color: var(--primary-dark) !important;
-              transform: translateY(-2px) !important;
-              box-shadow: 0 6px 16px rgba(0, 46, 95, 0.2) !important;
-            }
-            
-            input, select, textarea {
-              border-radius: var(--radius-md) !important;
-              border: 1px solid var(--border) !important;
-              padding: 0.875rem 1rem !important;
-              font-size: var(--font-size-md) !important;
-              transition: var(--transition-fast) !important;
-              background-color: rgba(248, 250, 253, 0.8) !important;
-              box-shadow: 0 2px 3px rgba(0, 0, 0, 0.01) inset !important;
-              width: 100% !important;
-              color: var(--text-primary) !important;
-            }
-            
-            input:focus, select:focus, textarea:focus {
-              outline: none !important;
-              border-color: var(--secondary) !important;
-              box-shadow: var(--shadow-focus) !important;
-              background-color: var(--background-light) !important;
-            }
-            
-            .slds-rich-text-editor__output p {
-              font-size: var(--font-size-md) !important;
-              line-height: 1.7 !important;
-              color: var(--text-primary) !important;
-              text-align: center !important;
-              margin-bottom: 1.5rem !important;
-              font-family: var(--font-sans) !important;
-            }
-            
-            .slds-form-element__label {
-              font-weight: 600 !important;
-              color: var(--primary) !important;
-              font-size: var(--font-size-sm) !important;
-              margin-bottom: 0.5rem !important;
-              font-family: var(--font-sans) !important;
-              display: block !important;
-            }
-            
-            footer.slds-modal__footer {
-              background: rgba(248, 250, 253, 0.8) !important;
-              border-top: 1px solid var(--border) !important;
-              display: flex !important;
-              justify-content: center !important;
-              padding: 1.5rem 0 !important;
-              margin-top: 1.5rem !important;
-            }
-            
-            .slds-card__header {
-              padding-top: 0 !important;
-              padding-bottom: 1rem !important;
-              border: none !important;
-              background: transparent !important;
-            }
-            
-            .slds-text-heading_small {
-              font-family: var(--font-sans) !important;
-              font-weight: 600 !important;
-              color: var(--primary) !important;
-              font-size: var(--font-size-lg) !important;
-              text-align: center !important;
-            }
-          `;
-          flowEl.shadowRoot.appendChild(style);
-          
-          // Observer pour détecter les clics sur le bouton Finish
-          const observer = new MutationObserver((mutations) => {
-            const footerButtons = flowEl.shadowRoot.querySelectorAll('footer button');
-            footerButtons.forEach(button => {
-              if (button.textContent.includes('Finish') && !button.hasAttribute('data-fireworks-added')) {
-                button.setAttribute('data-fireworks-added', 'true');
-                button.addEventListener('click', showFireworks);
-              }
-            });
-          });
-          
-          // Configuration de l'observateur
-          observer.observe(flowEl.shadowRoot, {
-            childList: true,
-            subtree: true
-          });
-        }
+        applyFlowStyling();
+        setupFlowObserver();
       }, 1500);
       
-      // Fonction pour afficher les feux d'artifice
-      function showFireworks() {
-        const pyro = document.querySelector('.pyro');
-        pyro.style.display = 'block';
-        
-        // Ajouter une classe pour animer la carte
-        const card = document.querySelector('.card');
-        card.classList.add('success-animation');
-        
-        // Créer plus de feux d'artifice
-        for (let i = 0; i < 10; i++) {
-          setTimeout(() => {
-            const newPyro = document.createElement('div');
-            newPyro.className = 'pyro';
-            newPyro.style.display = 'block';
-            
-            const before = document.createElement('div');
-            before.className = 'before';
-            const after = document.createElement('div');
-            after.className = 'after';
-            
-            newPyro.appendChild(before);
-            newPyro.appendChild(after);
-            
-            document.body.appendChild(newPyro);
-            
-            // Supprimer après l'animation
-            setTimeout(() => {
-              document.body.removeChild(newPyro);
-            }, 3000);
-          }, i * 250);
+    }, "https://solganeo--carboneio.sandbox.my.salesforce-sites.com");
+  }
+  
+  /**
+   * Application des styles CNOEC au Flow Salesforce
+   */
+  function applyFlowStyling() {
+    const flowEl = document.querySelector("flowruntime-flow");
+
+    if (flowEl && flowEl.shadowRoot) {
+      const style = document.createElement("style");
+      style.textContent = `
+        /* Boutons du Flow aux couleurs CNOEC */
+        button.slds-button_brand {
+          background-color: var(--primary) !important;
+          border: none !important;
+          border-radius: var(--radius-md) !important;
+          padding: 0.875rem 1.75rem !important;
+          font-size: var(--font-size-sm) !important;
+          font-weight: 600 !important;
+          letter-spacing: 0.5px !important;
+          text-transform: uppercase !important;
+          color: white !important;
+          transition: var(--transition-normal) !important;
+          box-shadow: 0 4px 12px rgba(0, 46, 95, 0.15) !important;
+          position: relative !important;
+          overflow: hidden !important;
+        }
+
+        button.slds-button_brand:hover {
+          background-color: var(--primary-dark) !important;
+          transform: translateY(-2px) !important;
+          box-shadow: 0 6px 16px rgba(0, 46, 95, 0.2) !important;
         }
         
-        // Cacher les feux d'artifice après quelques secondes
+        /* Champs de saisie aux couleurs CNOEC */
+        input, select, textarea {
+          border-radius: var(--radius-md) !important;
+          border: 1px solid var(--border) !important;
+          padding: 0.875rem 1rem !important;
+          font-size: var(--font-size-md) !important;
+          transition: var(--transition-fast) !important;
+          background-color: rgba(248, 250, 253, 0.8) !important;
+          box-shadow: 0 2px 3px rgba(0, 0, 0, 0.01) inset !important;
+          width: 100% !important;
+          color: var(--text-primary) !important;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+          outline: none !important;
+          border-color: var(--secondary) !important;
+          box-shadow: var(--shadow-focus) !important;
+          background-color: var(--background-light) !important;
+        }
+        
+        /* Texte riche */
+        .slds-rich-text-editor__output p {
+          font-size: var(--font-size-md) !important;
+          line-height: 1.7 !important;
+          color: var(--text-primary) !important;
+          text-align: center !important;
+          margin-bottom: 1.5rem !important;
+          font-family: var(--font-sans) !important;
+        }
+        
+        /* Labels des formulaires */
+        .slds-form-element__label {
+          font-weight: 600 !important;
+          color: var(--primary) !important;
+          font-size: var(--font-size-sm) !important;
+          margin-bottom: 0.5rem !important;
+          font-family: var(--font-sans) !important;
+          display: block !important;
+        }
+        
+        /* Footer du Flow */
+        footer.slds-modal__footer {
+          background: rgba(248, 250, 253, 0.8) !important;
+          border-top: 1px solid var(--border) !important;
+          display: flex !important;
+          justify-content: center !important;
+          padding: 1.5rem 0 !important;
+          margin-top: 1.5rem !important;
+        }
+        
+        /* Header du Flow */
+        .slds-card__header {
+          padding-top: 0 !important;
+          padding-bottom: 1rem !important;
+          border: none !important;
+          background: transparent !important;
+        }
+        
+        /* Titre du Flow */
+        .slds-text-heading_small {
+          font-family: var(--font-sans) !important;
+          font-weight: 600 !important;
+          color: var(--primary) !important;
+          font-size: var(--font-size-lg) !important;
+          text-align: center !important;
+        }
+      `;
+      flowEl.shadowRoot.appendChild(style);
+    }
+  }
+  
+  /**
+   * Configuration de l'observateur pour détecter les actions du Flow
+   */
+  function setupFlowObserver() {
+    const flowEl = document.querySelector("flowruntime-flow");
+    
+    if (flowEl && flowEl.shadowRoot) {
+      // Observer pour détecter les clics sur le bouton Finish
+      const observer = new MutationObserver((mutations) => {
+        const footerButtons = flowEl.shadowRoot.querySelectorAll('footer button');
+        footerButtons.forEach(button => {
+          if (button.textContent.includes('Finish') && !button.hasAttribute('data-fireworks-added')) {
+            button.setAttribute('data-fireworks-added', 'true');
+            button.addEventListener('click', showFlowSuccess);
+          }
+        });
+      });
+      
+      // Configuration de l'observateur
+      observer.observe(flowEl.shadowRoot, {
+        childList: true,
+        subtree: true
+      });
+    }
+  }
+  
+  /**
+   * Affichage des feux d'artifice lors du succès du Flow
+   */
+  function showFlowSuccess() {
+    const pyro = document.querySelector('.pyro');
+    const flowCard = document.querySelector('.flow-card');
+    
+    // Affichage des feux d'artifice
+    pyro.style.display = 'block';
+    
+    // Animation de la carte
+    flowCard.classList.add('success-animation');
+    
+    // Créer des feux d'artifice supplémentaires
+    for (let i = 0; i < 10; i++) {
+      setTimeout(() => {
+        const newPyro = document.createElement('div');
+        newPyro.className = 'pyro';
+        newPyro.style.display = 'block';
+        
+        const before = document.createElement('div');
+        before.className = 'before';
+        const after = document.createElement('div');
+        after.className = 'after';
+        
+        newPyro.appendChild(before);
+        newPyro.appendChild(after);
+        
+        document.body.appendChild(newPyro);
+        
+        // Supprimer après l'animation
         setTimeout(() => {
-          pyro.style.display = 'none';
+          if (document.body.contains(newPyro)) {
+            document.body.removeChild(newPyro);
+          }
         }, 3000);
-        
-        // Afficher un message de succès discret
-        const successMessage = document.createElement('div');
-        successMessage.className = 'success-message';
-        successMessage.innerHTML = '<span class="success-message-icon"></span> Connexion réussie';
-        card.appendChild(successMessage);
-        
+      }, i * 250);
+    }
+    
+    // Cacher les feux d'artifice principaux après quelques secondes
+    setTimeout(() => {
+      pyro.style.display = 'none';
+    }, 3000);
+    
+    // Afficher un message de succès
+    showSuccessMessage();
+  }
+  
+  /**
+   * Affichage du message de succès
+   */
+  function showSuccessMessage() {
+    const flowContent = document.querySelector('.flow-content');
+    
+    // Créer le message de succès
+    const successMessage = document.createElement('div');
+    successMessage.className = 'success-message';
+    successMessage.innerHTML = '<span class="success-message-icon"></span> Opération réussie !';
+    
+    // Ajouter au contenu du Flow
+    flowContent.appendChild(successMessage);
+    
+    // Animer l'apparition
+    setTimeout(() => {
+      successMessage.classList.add('show');
+    }, 300);
+    
+    // Masquer après 5 secondes
+    setTimeout(() => {
+      if (flowContent.contains(successMessage)) {
+        successMessage.classList.remove('show');
         setTimeout(() => {
-          successMessage.classList.add('show');
+          if (flowContent.contains(successMessage)) {
+            flowContent.removeChild(successMessage);
+          }
         }, 300);
       }
-    }, "https://solganeo--carboneio.sandbox.my.salesforce-sites.com");
-  </script>
+    }, 5000);
+  }
   
-  <!-- Script additionnel pour améliorer l'expérience utilisateur -->
-  <script>
-    // Effet de parallaxe subtil
+  /**
+   * Gestion des erreurs de chargement
+   */
+  function showLoadingError() {
+    const loadingElement = document.getElementById('flowLoading');
+    if (loadingElement) {
+      loadingElement.innerHTML = `
+        <div style="color: var(--error); text-align: center;">
+          <span style="font-size: 2rem;">⚠️</span>
+          <p>Erreur de chargement du Flow Salesforce</p>
+          <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer;">
+            Réessayer
+          </button>
+        </div>
+      `;
+    }
+  }
+  
+  // === EFFET DE PARALLAXE SUBTIL ===
+  
+  /**
+   * Effet de parallaxe pour améliorer l'expérience utilisateur
+   */
+  function setupParallaxEffect() {
     document.addEventListener('mousemove', function(e) {
-      const card = document.querySelector('.card');
-      if (!card) return;
+      const flowCard = document.querySelector('.flow-card');
+      if (!flowCard) return;
       
       // Limiter l'effet à un mouvement très léger
-      const moveX = (e.clientX - window.innerWidth / 2) * 0.005;
-      const moveY = (e.clientY - window.innerHeight / 2) * 0.005;
+      const moveX = (e.clientX - window.innerWidth / 2) * 0.003;
+      const moveY = (e.clientY - window.innerHeight / 2) * 0.003;
       
-      card.style.transform = `translate(${moveX}px, ${moveY}px)`;
+      flowCard.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    });
+  }
+  
+  /**
+   * Amélioration des interactions avec les champs du Flow
+   */
+  function enhanceFlowInteractions() {
+    // Attendre le chargement du Flow
+    setTimeout(() => {
+      const inputs = document.querySelectorAll('input, select, textarea');
+      inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+          this.closest('.slds-form-element')?.classList.add('form-element-focus');
+        });
+        
+        input.addEventListener('blur', function() {
+          this.closest('.slds-form-element')?.classList.remove('form-element-focus');
+        });
+      });
+    }, 3000);
+  }
+  
+  // === INITIALISATION ===
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    // Animation des éléments au chargement
+    document.querySelectorAll('.animate-in').forEach((element, index) => {
+      element.style.animationDelay = (index * 0.1) + 's';
     });
     
-    // Ajout de l'effet de focus sur les champs au chargement
-    window.addEventListener('load', function() {
-      setTimeout(() => {
-        const inputs = document.querySelectorAll('input, select, textarea');
-        inputs.forEach(input => {
-          input.addEventListener('focus', function() {
-            this.closest('.slds-form-element')?.classList.add('form-element-focus');
-          });
-          
-          input.addEventListener('blur', function() {
-            this.closest('.slds-form-element')?.classList.remove('form-element-focus');
-          });
-        });
-      }, 2000);
-    });
-  </script>
-</body>
-</html>
+    // Initialisation du Flow Salesforce
+    setTimeout(() => {
+      initializeSalesforceFlow();
+    }, 500);
+    
+    // Configuration des effets visuels
+    setupParallaxEffect();
+    
+    // Amélioration des interactions
+    enhanceFlowInteractions();
+  });
+  
+  // Nettoyage à la fermeture de la page
+  window.addEventListener('beforeunload', function() {
+    // Nettoyage des timers et observateurs si nécessaire
+  });
+</script>
+{% endblock %}

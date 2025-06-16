@@ -1,0 +1,16 @@
+# === NOTES D'INSTALLATION ===
+#
+# DÉVELOPPEMENT LOCAL :
+# 1. pip install -r requirements.txt
+# 2. Créer fichier .env avec vos variables
+# 
+# PRODUCTION HEROKU :
+# 1. Heroku installe automatiquement depuis ce fichier
+# 2. Configurer les variables d'environnement dans l'interface Heroku
+#
+# VARIABLES REQUISES :
+# - SECRET_KEY (clé secrète longue et complexe)
+# - GMAIL_USER (noreply@solganeo.com)  
+# - GMAIL_PASSWORD (mot de passe application Gmail)
+# - REDIS_URL (fourni automatiquement par Heroku Redis addon)
+# - DATABASE_URL (fourni automatiquement par Heroku Postgres addon)
