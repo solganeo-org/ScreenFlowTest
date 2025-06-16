@@ -873,6 +873,38 @@
                 '  border: 1px solid var(--border-light);\n' +
                 '  overflow: hidden;\n' +
                 '}\n\n' +
+                '.flow-header {\n' +
+                '  background: linear-gradient(135deg, rgba(0, 46, 95, 0.05) 0%, rgba(0, 84, 166, 0.05) 100%);\n' +
+                '  padding: 1.5rem;\n' +
+                '  border-bottom: 1px solid var(--border-light);\n' +
+                '  text-align: center;\n' +
+                '  display: flex;\n' +
+                '  flex-direction: column;\n' +
+                '  align-items: center;\n' +
+                '  justify-content: center;\n' +
+                '}\n\n' +
+                '.flow-title {\n' +
+                '  display: flex;\n' +
+                '  align-items: center;\n' +
+                '  justify-content: center;\n' +
+                '  gap: 0.75rem;\n' +
+                '  font-size: var(--font-size-xl);\n' +
+                '  font-weight: 600;\n' +
+                '  color: var(--primary);\n' +
+                '  margin-bottom: 0.5rem;\n' +
+                '  width: 100%;\n' +
+                '}\n\n' +
+                '.flow-icon {\n' +
+                '  font-size: 1.5rem;\n' +
+                '}\n\n' +
+                '.flow-description {\n' +
+                '  color: var(--text-secondary);\n' +
+                '  font-size: var(--font-size-md);\n' +
+                '  line-height: 1.6;\n' +
+                '  text-align: center;\n' +
+                '  max-width: 600px;\n' +
+                '  margin: 0 auto;\n' +
+                '}\n\n' +
                 '.flow-content {\n' +
                 '  padding: 2rem;\n' +
                 '  min-height: 400px;\n' +
@@ -909,6 +941,22 @@
                 '  to {\n' +
                 '    opacity: 1;\n' +
                 '    transform: translateY(0);\n' +
+                '  }\n' +
+                '}\n\n' +
+                '/* Responsive */\n' +
+                '@media (max-width: 768px) {\n' +
+                '  .flow-header {\n' +
+                '    padding: 1rem;\n' +
+                '  }\n' +
+                '  \n' +
+                '  .flow-title {\n' +
+                '    font-size: var(--font-size-lg);\n' +
+                '    flex-direction: column;\n' +
+                '    gap: 0.5rem;\n' +
+                '  }\n' +
+                '  \n' +
+                '  .flow-description {\n' +
+                '    font-size: var(--font-size-sm);\n' +
                 '  }\n' +
                 '}';
         }
