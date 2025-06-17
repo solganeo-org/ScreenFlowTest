@@ -1,0 +1,78 @@
+{% extends "base_user.html" %}
+
+{% block title %}testN{% endblock %}
+
+{% block description %}bla bla{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/salesforce-flow.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="flow-welcome animate-in">
+  <h2>testN</h2>
+  <p>bla bla</p>
+  <div class="flow-badge">
+    <span>🔒</span>
+    Session sécurisée pour {{ session.get('otp_email_verified', 'utilisateur') }}
+  </div>
+</div>
+
+<div class="main-flow-container">
+  <div class="flow-card animate-in" id="flowContainer">
+    <div class="flow-header">
+      <h3 class="flow-title">
+        <span class="flow-icon">⚡</span>
+        Flow Salesforce Intégré
+      </h3>
+      <p class="flow-description">
+        Accédez directement à vos outils Salesforce
+      </p>
+    </div>
+    <div class="flow-content" id="salesforceFlowContent">
+      <div class="flow-loading" id="flowLoading">
+        <div class="flow-spinner"></div>
+        <p>Chargement du Flow Salesforce...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pyro">
+  <div class="before"></div>
+  <div class="after"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://solganeo--carboneio.sandbox.lightning.force.com/lightning/lightning.out.js"></script>
+<script src="{{ url_for('static', filename='js/salesforce-flow.js') }}"></script>
+<script>
+  // Configuration spécifique à cette page
+  document.addEventListener('DOMContentLoaded', function() {
+    // Vérifier que Lightning est chargé
+    if (typeof $Lightning === "undefined") {
+      console.error("Lightning framework non chargé");
+      showLoadingError();
+      return;
+    }
+    
+    // Initialisation du Flow spécifique à cette page
+    $Lightning.use("c:testNApp", function() {
+      const loadingElement = document.getElementById("flowLoading");
+      if (loadingElement) {
+        loadingElement.style.display = "none";
+      }
+      
+      $Lightning.createComponent("c:testN", {}, "salesforceFlowContent");
+      
+      // Appliquer les styles après chargement
+      setTimeout(function() {
+        applyFlowStyling();
+        setupFlowObserver();
+      }, 1500);
+      
+    }, "https://solganeo--carboneio.sandbox.my.salesforce-sites.com");
+  });
+</script>
+{% endblock %}
