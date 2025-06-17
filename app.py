@@ -450,6 +450,19 @@ def testN():
     return render_template("testN.html", session_status=session_status)
 
 
+@app.route("/testomar")
+def testomar():
+    """
+    Route protégée - Test Omar
+    Nécessite une authentification OTP valide
+    """
+    if not is_session_valid():
+        return redirect(url_for("auth_otp"))
+    
+    renew_session()
+    session_status = get_session_status()
+    
+    return render_template("testomar.html", session_status=session_status)
 
 if __name__ == "__main__":
     # Configuration pour le démarrage de l'application
